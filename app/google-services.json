@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "817322846150",
+    "project_id": "detudoumpouquinho-27b6e",
+    "storage_bucket": "detudoumpouquinho-27b6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817322846150:android:d735b3510229c31769f4c7",
+        "android_client_info": {
+          "package_name": "br.com.detudoumpouquinho"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817322846150-q7iings24b4bl6cga48t3gf4b4sahfnl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBDXkAwkjx5BA-5oiHg3iEyJOXEN-0lls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817322846150-q7iings24b4bl6cga48t3gf4b4sahfnl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
