@@ -2,11 +2,8 @@ package br.com.detudoumpouquinho.service.user
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import br.com.detudoumpouquinho.model.Products
 import br.com.detudoumpouquinho.model.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirebaseServiceUser : FirebaseServiceUserContract {
@@ -17,22 +14,6 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
     private val createUserListener: MutableLiveData<Boolean> = MutableLiveData()
     private val signUserListener: MutableLiveData<Boolean> = MutableLiveData()
 
-    override fun insertNewProduct(products: Products): Task<DocumentReference> {
-        val map: MutableMap<String, String?> = HashMap()
-        map["name"] = products.name
-        map["price"] = products.price
-        map["image"] = products.image
-
-        return firestoreInstance
-            .collection("Products")
-            .add(map)
-            .addOnSuccessListener {
-                return@addOnSuccessListener
-            }.addOnFailureListener {
-                return@addOnFailureListener
-            }
-    }
-
     override fun insertNewUser(user: User) {
         firestoreCreateUserInstance
             .createUserWithEmailAndPassword(user.email, user.password)
@@ -40,6 +21,7 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
                 val map: MutableMap<String, String?> = HashMap()
                 map["name"] = user.name
                 map["email"] = user.email
+                map["identifier"] = user.userIdentify.toString()
 
                 firestoreInstance
                     .collection("User")

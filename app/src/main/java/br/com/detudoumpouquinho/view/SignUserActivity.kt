@@ -30,6 +30,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
         when (p0?.id) {
             R.id.tx_sign_up -> {
                 startActivity(Intent(this, CreateNewUserActivity::class.java))
+                finish()
             }
             R.id.bt_sign_user -> {
                 setSignUserInformation()
@@ -45,7 +46,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun setObservers() {
         userViewModel.signUserListener().observe(this) {
             if (it == true) {
-
+                startActivity(Intent(this, ProductsActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(
                     this,

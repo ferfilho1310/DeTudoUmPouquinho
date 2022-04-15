@@ -1,5 +1,7 @@
 package br.com.detudoumpouquinho.di
 
+import br.com.detudoumpouquinho.service.product.FirebaseServiceProducts
+import br.com.detudoumpouquinho.service.product.FirebaseServiceProductsContract
 import br.com.detudoumpouquinho.service.user.FirebaseServiceUser
 import br.com.detudoumpouquinho.service.user.FirebaseServiceUserContract
 import br.com.detudoumpouquinho.view.CreateNewUserActivity
@@ -12,7 +14,7 @@ import org.koin.dsl.module
 object KoinModules {
 
     val viewModel = module {
-        viewModel { ProductsViewModel(firebaseServiceUserContract = get()) }
+        viewModel { ProductsViewModel(firebaseServiceProducts = get()) }
         viewModel { UserViewModel(firebaseServiceUserContract = get()) }
     }
 
@@ -23,5 +25,6 @@ object KoinModules {
 
     val service = module {
         factory<FirebaseServiceUserContract> { FirebaseServiceUser() }
+        factory<FirebaseServiceProductsContract> { FirebaseServiceProducts() }
     }
 }

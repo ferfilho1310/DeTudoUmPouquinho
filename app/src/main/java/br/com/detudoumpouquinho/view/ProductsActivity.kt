@@ -1,36 +1,72 @@
 package br.com.detudoumpouquinho.view
 
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
-import org.koin.android.ext.android.inject
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProductsActivity : AppCompatActivity() {
+class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val productsViewModel: ProductsViewModel by viewModel()
+    private var options: FirestoreRecyclerOptions<Product>? = null
+    private var adapter: ProdutosAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
 
-        //productsViewModel.insertProduct()
+        supportActionBar?.hide()
+
+        insert_new_product.setOnClickListener(this)
+        productsViewModel.loadProducts()
         setObservers()
+
+        searchView.onActionViewExpanded();
+        searchView.clearFocus()
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(p0: String?): Boolean {
+                productsViewModel.searchProduct(p0.orEmpty())
+                return false
+            }
+
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+        })
+
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.insert_new_product -> {
+                val bottomSheetDialogFragment = InsertProductBottomFragment()
+                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
+            }
+        }
     }
 
     private fun setObservers() {
-        productsViewModel.productsLiveData.observe(this) {
-            if (it == true) {
-                //TODO: Navigate other screen
-            } else {
-                Toast.makeText(
-                    this,
-                    "Erro ao cadastrar os produtos",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        productsViewModel.loadProdutsListener().observe(this) {
+         options = FirestoreRecyclerOptions.Builder<Product>()
+                .setQuery(it, Product::class.java)
+                .build()
+
+            adapter = ProdutosAdapter(options, productsViewModel, this)
+
+            rc_products.adapter = adapter
+            rc_products.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            rc_products.setHasFixedSize(true)
+
+            adapter?.startListening()
         }
     }
 }
