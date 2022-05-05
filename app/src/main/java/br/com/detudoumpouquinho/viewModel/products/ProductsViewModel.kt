@@ -36,4 +36,11 @@ class ProductsViewModel(
     override fun deleteProductListener() = firebaseServiceProducts.deleteProductListener()
 
     override fun insertProductListener() = firebaseServiceProducts.insertNewProductListener()
+
+    override fun updateProduct(position: String, product: Product) {
+        firebaseServiceProducts.updateProduct(position, product)
+    }
+
+    override fun updateProductListener() = firebaseServiceProducts.updateProductListener()
+
 }

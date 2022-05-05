@@ -4,8 +4,10 @@
     package="br.com.detudoumpouquinho">
 
     <permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application
@@ -16,6 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Detudoumpouquinho">
+        <activity
+            android:name=".view.ProducUpdate"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.CreateNewUserActivity"
             android:exported="true"

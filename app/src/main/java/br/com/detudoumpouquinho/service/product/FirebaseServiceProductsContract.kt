@@ -14,4 +14,6 @@ interface FirebaseServiceProductsContract {
     fun deleteProductListener(): MutableLiveData<Boolean>
     fun buscarProdutos(nomeProduto: String)
     fun buscarProdutosListener(): MutableLiveData<Query>
+    fun updateProduct(documentId: String, model: Product)
+    fun updateProductListener(): MutableLiveData<Boolean>
 }

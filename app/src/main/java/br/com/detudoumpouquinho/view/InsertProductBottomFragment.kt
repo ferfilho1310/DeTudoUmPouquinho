@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.Utils.PhotosUtils
-import br.com.detudoumpouquinho.model.Photos
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
@@ -134,5 +132,10 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         return dialog
+    }
+
+    fun FotosListerner() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 }

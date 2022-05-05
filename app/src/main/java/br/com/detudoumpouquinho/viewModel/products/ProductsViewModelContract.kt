@@ -13,4 +13,6 @@ interface ProductsViewModelContract {
     fun searchProduct(): MutableLiveData<Query>
     fun deleteProduct(documentId: DocumentReference)
     fun deleteProductListener(): MutableLiveData<Boolean>
+    fun updateProduct(position: String, product: Product)
+    fun updateProductListener(): MutableLiveData<Boolean>
 }

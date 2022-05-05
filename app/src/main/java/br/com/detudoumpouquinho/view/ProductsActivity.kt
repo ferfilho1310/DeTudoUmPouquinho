@@ -1,12 +1,18 @@
 package br.com.detudoumpouquinho.view
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
-import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -42,7 +48,6 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 return false
             }
         })
-
     }
 
     override fun onClick(p0: View?) {

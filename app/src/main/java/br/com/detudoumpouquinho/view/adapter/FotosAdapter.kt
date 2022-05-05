@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Photos
 import br.com.detudoumpouquinho.view.viewHolder.FotosViewHolder
+import kotlinx.android.synthetic.main.fotos_item_view_holder.view.*
 
 class FotosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -28,7 +29,15 @@ class FotosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val holderFotos = holder as FotosViewHolder
         holderFotos.bindFotos(listFotos[position])
+        holderFotos.view.img_remove_foto.setOnClickListener {
+            removeFoto(holder.adapterPosition)
+        }
     }
 
     override fun getItemCount() = listFotos.size
+
+    private fun removeFoto(position: Int){
+        listFotos.removeAt(position)
+        notifyItemRemoved(position)
+    }
 }

@@ -17,6 +17,7 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
     private val createNewProductListener: MutableLiveData<Boolean> = MutableLiveData()
     private val loadNewProductListener: MutableLiveData<Query> = MutableLiveData()
     private val deleteProduct: MutableLiveData<Boolean> = MutableLiveData()
+    private val updateProduct by lazy { MutableLiveData<Boolean>() }
 
     var query: Query? = null
 
@@ -91,12 +92,40 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
             nomeProduto.uppercase(
                 Locale.getDefault()
             )
-        ).endAt(nomeProduto.uppercase(Locale.getDefault()) + "\uf8ff");
+        ).endAt(nomeProduto.uppercase(Locale.getDefault()) + "\uf8ff")
 
         loadNewProductListener.value = query
     }
 
     override fun buscarProdutosListener(): MutableLiveData<Query> {
         return loadNewProductListener
+    }
+
+    override fun updateProduct(documentId: String, model: Product) {
+        val map: MutableMap<String, Any?> = HashMap()
+
+        model.apply {
+            map["description"] = description
+            map["image"] = image
+            map["subtitle"] = subtitle
+            map["title"] = title
+            map["value"] = value
+            map["titleUppercase"] = title?.uppercase()
+        }
+
+        firestoreInstance
+            .collection("Products")
+            .document(documentId)
+            .update(map)
+            .addOnSuccessListener {
+                updateProduct.value = true
+            }
+            .addOnFailureListener {
+                updateProduct.value = false
+            }
+    }
+
+    override fun updateProductListener(): MutableLiveData<Boolean> {
+        return updateProduct
     }
 }
