@@ -16,4 +16,6 @@ interface FirebaseServiceProductsContract {
     fun buscarProdutosListener(): MutableLiveData<Query>
     fun updateProduct(documentId: String, model: Product)
     fun updateProductListener(): MutableLiveData<Boolean>
+    fun buscarProdutosId(idProducto: String)
+    fun buscarProdutosIdListener(): MutableLiveData<Product>
 }

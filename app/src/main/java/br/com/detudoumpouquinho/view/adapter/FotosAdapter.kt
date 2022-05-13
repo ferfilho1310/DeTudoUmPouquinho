@@ -1,6 +1,8 @@
 package br.com.detudoumpouquinho.view.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +24,8 @@ class FotosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return FotosViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.fotos_item_view_holder, parent, false)
+                .inflate(R.layout.fotos_item_view_holder, parent, false),
+            parent.context
         )
     }
 

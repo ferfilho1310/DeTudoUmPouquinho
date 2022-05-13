@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
-import br.com.detudoumpouquinho.view.ProducUpdate
+import br.com.detudoumpouquinho.view.ProductUpdate
 import br.com.detudoumpouquinho.view.viewHolder.ProdutosViewHolder
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -25,7 +25,8 @@ class ProdutosAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ProdutosViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.products_item_view_holder, parent, false)
+                .inflate(R.layout.products_item_view_holder, parent, false),
+            parent.context
         )
     }
 
@@ -38,8 +39,7 @@ class ProdutosAdapter(
         }
 
         viewHolder.view.edit_products.setOnClickListener {
-            val intent = Intent(context, ProducUpdate::class.java)
-            intent.putExtra("produto", model)
+            val intent = Intent(context, ProductUpdate::class.java)
             intent.putExtra("position", snapshots.getSnapshot(position).reference.id)
             context.startActivity(intent)
         }

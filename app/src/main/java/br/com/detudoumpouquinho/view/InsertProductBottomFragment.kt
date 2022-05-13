@@ -5,7 +5,9 @@ import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -55,7 +57,8 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         val description = view.findViewById<TextInputEditText>(R.id.product_description)
 
         viewf.setOnClickListener {
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val cameraIntent = Intent(Intent.ACTION_PICK)
+            cameraIntent.type = "image/*"
             startActivityForResult(cameraIntent, CAMERA_REQUEST)
         }
 
@@ -102,11 +105,12 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     try {
-                        val pic: Bitmap? = data?.getParcelableExtra("data")
-                        adapter.listFotos(
-                            PhotosUtils.bitMapToString(pic).orEmpty()
-                        )
-                        photos.add(PhotosUtils.bitMapToString(pic).orEmpty())
+
+                        adapter.listFotos(PhotosUtils.uriToBitmap(data!!, requireContext().contentResolver).orEmpty())
+                        context?.let {
+                            PhotosUtils.uriToBitmap(data, requireContext().contentResolver)
+                                .let { photos.add(it!!) }
+                        }
 
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), "Picture Not taken", Toast.LENGTH_LONG)
@@ -132,10 +136,5 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         return dialog
-    }
-
-    fun FotosListerner() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 }

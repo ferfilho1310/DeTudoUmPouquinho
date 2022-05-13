@@ -2,7 +2,9 @@ package br.com.detudoumpouquinho.view
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -14,12 +16,10 @@ import br.com.detudoumpouquinho.Utils.PhotosUtils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
-import kotlinx.android.synthetic.main.activity_insert_product.*
 import kotlinx.android.synthetic.main.product_updat_view.*
-import kotlinx.android.synthetic.main.products_item_view_holder.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProducUpdate : AppCompatActivity(), View.OnClickListener {
+class ProductUpdate : AppCompatActivity(), View.OnClickListener {
 
     private val adapter by lazy { FotosAdapter() }
     private val productsViewModel: ProductsViewModel by viewModel()
@@ -32,26 +32,30 @@ class ProducUpdate : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.product_updat_view)
 
         val bundle = intent.extras
-        val model = bundle?.getParcelable<Product>("produto")
         position = bundle?.getString("position").toString()
+        productsViewModel.buscarProdutosId(position)
 
         listeners()
         setObserver()
 
-        title_updated.setText(model?.title)
-        subtitle_updated.setText(model?.subtitle)
-        description_update.setText(model?.description)
+        productsViewModel.buscarProdutosIdListener().observe(this) { product ->
+            product?.let {
+                it.image?.forEach { image ->
+                    adapter.listFotos(image)
+                    photos.add(image)
+                }
+                title_updated.setText(it.title)
+                subtitle_updated.setText(it.subtitle)
+                description_update.setText(it.description)
+                value_update.setText(it.value)
+            }
+        }
 
         rc_products_imagens_update.adapter = adapter
         val layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rc_products_imagens_update.layoutManager = layoutManager
         rc_products_imagens_update.setHasFixedSize(true)
-
-        model?.image?.forEach {
-            adapter.listFotos(it)
-            photos.add(it)
-        }
     }
 
     override fun onClick(p0: View?) {
@@ -73,6 +77,7 @@ class ProducUpdate : AppCompatActivity(), View.OnClickListener {
                             title = title_updated.text.toString(),
                             subtitle = subtitle_updated.text.toString(),
                             image = photos,
+                            value = value_update.text.toString(),
                             description = description_update.text.toString()
                         )
                         productsViewModel.updateProduct(position, produto)
@@ -88,14 +93,14 @@ class ProducUpdate : AppCompatActivity(), View.OnClickListener {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     try {
-                        val pic: Bitmap? = data?.getParcelableExtra("data")
                         adapter.listFotos(
-                            PhotosUtils.bitMapToString(pic).orEmpty()
+                            PhotosUtils.uriToBitmap(data!!, contentResolver).orEmpty()
                         )
-                        photos.add(PhotosUtils.bitMapToString(pic).orEmpty())
+                        PhotosUtils.uriToBitmap(data, contentResolver)
+                            .let { photos.add(it!!) }
 
                     } catch (e: Exception) {
-                        Toast.makeText(this, "Picture Not taken", Toast.LENGTH_LONG)
+                        Toast.makeText(this, "Picture Not taken $e", Toast.LENGTH_LONG)
                             .show()
                     }
                 }
@@ -118,18 +123,24 @@ class ProducUpdate : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+        intentProductActivity()
     }
 
     private fun setObserver() {
         productsViewModel.updateProductListener().observe(this) {
             if (it == true) {
-                finish()
-                Toast.makeText(this, "Producto atualizado", Toast.LENGTH_SHORT).show();
+                intentProductActivity()
+                Toast.makeText(this, "Produto atualizado", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Falha ao atualizar produto", Toast.LENGTH_SHORT)
                     .show();
             }
         }
+    }
+
+    private fun intentProductActivity() {
+        val intent = Intent(this, ProductsActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

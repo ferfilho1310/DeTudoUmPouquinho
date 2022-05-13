@@ -15,4 +15,6 @@ interface ProductsViewModelContract {
     fun deleteProductListener(): MutableLiveData<Boolean>
     fun updateProduct(position: String, product: Product)
     fun updateProductListener(): MutableLiveData<Boolean>
+    fun buscarProdutosId(idProducto: String)
+    fun buscarProdutosIdListener(): MutableLiveData<Product>
 }

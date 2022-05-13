@@ -1,23 +1,21 @@
 package br.com.detudoumpouquinho.service.product
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import br.com.detudoumpouquinho.model.Product
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 class FirebaseServiceProducts : FirebaseServiceProductsContract {
 
     private val firestoreInstance = FirebaseFirestore.getInstance()
 
-    private val createNewProductListener: MutableLiveData<Boolean> = MutableLiveData()
-    private val loadNewProductListener: MutableLiveData<Query> = MutableLiveData()
-    private val deleteProduct: MutableLiveData<Boolean> = MutableLiveData()
+    private val createNewProductListener by lazy { MutableLiveData<Boolean>() }
+    private val loadNewProductListener by lazy { MutableLiveData<Query>() }
+    private val deleteProduct by lazy { MutableLiveData<Boolean>() }
     private val updateProduct by lazy { MutableLiveData<Boolean>() }
+    private val buscarProducoIdListener by lazy { MutableLiveData<Product>() }
 
     var query: Query? = null
 
@@ -41,28 +39,10 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
             }
     }
 
-
     override fun insertNewProductListener() = createNewProductListener
 
     override fun loadProducts() {
-
         query = firestoreInstance.collection("Products")
-
-/*
-        firestoreInstance.collection("Products").addSnapshotListener { value, _ ->
-            val list: ArrayList<Product> = ArrayList()
-            value?.documents?.forEach {
-                val products = it.data
-                list.add(
-                    Product(
-                        title = products?.get("title").toString(),
-                        value = products?.get("value").toString(),
-                        subtitle = products?.get("subtitle").toString(),
-                        description = products?.get("description").toString(),
-                        image = products?.get("image") as List<String>
-                    )
-                )
-            }*/
         loadNewProductListener.value = query
     }
 
@@ -127,5 +107,22 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
 
     override fun updateProductListener(): MutableLiveData<Boolean> {
         return updateProduct
+    }
+
+    override fun buscarProdutosId(idProducto: String) {
+        firestoreInstance
+            .collection("Products")
+            .document(idProducto)
+            .get()
+            .addOnSuccessListener {
+                buscarProducoIdListener.value = it.toObject(Product::class.java)
+            }.addOnFailureListener {
+                val product: Product? = null
+                buscarProducoIdListener.value = product
+            }
+    }
+
+    override fun buscarProdutosIdListener(): MutableLiveData<Product> {
+        return buscarProducoIdListener
     }
 }

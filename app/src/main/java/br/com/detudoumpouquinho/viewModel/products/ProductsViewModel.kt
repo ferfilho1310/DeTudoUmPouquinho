@@ -43,4 +43,10 @@ class ProductsViewModel(
 
     override fun updateProductListener() = firebaseServiceProducts.updateProductListener()
 
+    override fun buscarProdutosId(idProducto: String) {
+        firebaseServiceProducts.buscarProdutosId(idProducto)
+    }
+
+    override fun buscarProdutosIdListener() = firebaseServiceProducts.buscarProdutosIdListener()
+
 }

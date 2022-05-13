@@ -55,34 +55,33 @@
             android:layout_marginStart="8dp"
             android:text="Shampoo EuMe 250ml"
             android:textColor="@android:color/black"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
             app:layout_constraintStart_toEndOf="@+id/img_produtos_main"
             app:layout_constraintTop_toBottomOf="@+id/delete_products" />
 
         <TextView
-            android:id="@+id/value"
+            android:id="@+id/product_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="R$ 50,00"
             android:textColor="@android:color/holo_blue_dark"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <Button
-            android:id="@+id/bt_product_see_more"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/holo_blue_light"
-            android:text="Ver mais"
-            app:layout_constraintBottom_toBottomOf="@+id/img_produtos_main"
+            android:background="@color/white"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_next"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_produtos_main" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
