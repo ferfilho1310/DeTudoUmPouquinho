@@ -1,5 +1,6 @@
 package br.com.detudoumpouquinho.viewModel.user
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.service.user.FirebaseServiceUserContract
@@ -17,7 +18,13 @@ class UserViewModel(
         firebaseServiceUserContract.signUser(user)
     }
 
+    override fun searchIdUser(userId: String) {
+        firebaseServiceUserContract.searchIdUser(userId)
+    }
+
     override fun createUserListener() = firebaseServiceUserContract.resultCreateUser()
 
     override fun signUserListener() = firebaseServiceUserContract.resultSignUser()
+
+    override fun searchIdUserListener() = firebaseServiceUserContract.searchIdUserListener()
 }

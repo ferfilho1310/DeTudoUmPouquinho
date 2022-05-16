@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.create_new_user_activity.*
 import kotlinx.android.synthetic.main.sign_user_activity.*
 import org.koin.android.ext.android.inject
@@ -35,6 +36,15 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_sign_user -> {
                 setSignUserInformation()
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            val intent = Intent(this, ProductsActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

@@ -82,8 +82,7 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                         name = create_name.text.toString(),
                         email = create_email.text.toString(),
                         password = create_password.text.toString(),
-                        confirmPassword = create_confirm_password.text.toString(),
-                        userIdentify = User.UserIdentify.USER
+                        confirmPassword = create_confirm_password.text.toString()
                     )
                 )
             }

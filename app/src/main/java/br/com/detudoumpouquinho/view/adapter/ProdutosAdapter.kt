@@ -5,13 +5,16 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.ProductUpdate
+import br.com.detudoumpouquinho.view.ProductsActivity
 import br.com.detudoumpouquinho.view.viewHolder.ProdutosViewHolder
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
+import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import kotlinx.android.synthetic.main.products_item_view_holder.view.*
@@ -19,6 +22,7 @@ import kotlinx.android.synthetic.main.products_item_view_holder.view.*
 class ProdutosAdapter(
     options: FirestoreRecyclerOptions<Product>?,
     var viewModel: ProductsViewModel,
+    val userViewModel: UserViewModel,
     var context: Context,
 ) : FirestoreRecyclerAdapter<Product, RecyclerView.ViewHolder>(options!!) {
 
@@ -32,7 +36,7 @@ class ProdutosAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: Product) {
         val viewHolder = holder as ProdutosViewHolder
-        viewHolder.bind(model)
+        viewHolder.bind(model, userViewModel)
 
         viewHolder.view.delete_products.setOnClickListener {
             deleteProduto(viewHolder.adapterPosition)

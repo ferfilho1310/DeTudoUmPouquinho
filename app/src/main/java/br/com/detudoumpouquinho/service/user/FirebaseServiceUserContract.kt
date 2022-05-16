@@ -9,4 +9,6 @@ interface FirebaseServiceUserContract {
     fun signUser(user: User)
     fun resultCreateUser(): MutableLiveData<Boolean>
     fun resultSignUser(): MutableLiveData<Boolean>
+    fun searchIdUser(userId: String)
+    fun searchIdUserListener(): MutableLiveData<User>
 }

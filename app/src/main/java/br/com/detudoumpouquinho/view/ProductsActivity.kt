@@ -2,6 +2,7 @@ package br.com.detudoumpouquinho.view
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -9,18 +10,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
+import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val productsViewModel: ProductsViewModel by viewModel()
+    private val userViewModel: UserViewModel by viewModel()
     private var options: FirestoreRecyclerOptions<Product>? = null
     private var adapter: ProdutosAdapter? = null
     private val RECORD_REQUEST_CODE = 101
@@ -29,13 +34,17 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
         permissions()
-
+        setObservers()
+        productsViewModel.loadProducts()
         supportActionBar?.hide()
 
         insert_new_product.setOnClickListener(this)
-        productsViewModel.loadProducts()
-        setObservers()
+        img_sair.setOnClickListener(this)
 
+        setSearchView()
+    }
+
+    private fun setSearchView() {
         searchView.onActionViewExpanded();
         searchView.clearFocus()
         searchView.queryHint = "Pesquisar produto"
@@ -50,6 +59,31 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 return false
             }
         })
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.insert_new_product -> {
+                val bottomSheetDialogFragment = InsertProductBottomFragment()
+                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
+            }
+            R.id.img_sair -> {
+                FirebaseAuth.getInstance().signOut().also {
+                    val i = Intent(this, SignUserActivity::class.java)
+                    startActivity(i)
+                    finish()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        FirebaseAuth.getInstance().currentUser?.let {
+            userViewModel.searchIdUser(
+                it.uid
+            )
+        }
     }
 
     private fun makeRequestRead() {
@@ -68,16 +102,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         )
     }
 
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-            R.id.insert_new_product -> {
-                val bottomSheetDialogFragment = InsertProductBottomFragment()
-                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
-            }
-        }
-    }
-
-    private  fun permissions() {
+    private fun permissions() {
         val permissionWrite = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)
         val permissionRead = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE)
 
@@ -96,7 +121,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 .setQuery(it, Product::class.java)
                 .build()
 
-            adapter = ProdutosAdapter(options, productsViewModel, this)
+            adapter = ProdutosAdapter(options, productsViewModel, userViewModel, this)
 
             rc_products.adapter = adapter
             rc_products.layoutManager =
@@ -105,5 +130,14 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
             adapter?.startListening()
         }
+
+        userViewModel.searchIdUserListener().observe(this) {
+            insert_new_product.isVisible = it.identifier != USER
+
+        }
+    }
+
+    companion object {
+        val USER = "USER"
     }
 }
