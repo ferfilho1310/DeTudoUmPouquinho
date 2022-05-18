@@ -121,7 +121,13 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 .setQuery(it, Product::class.java)
                 .build()
 
-            adapter = ProdutosAdapter(options, productsViewModel, userViewModel, this)
+            adapter = ProdutosAdapter(
+                options,
+                productsViewModel,
+                userViewModel,
+                this,
+                ::showDetailsProduct
+            )
 
             rc_products.adapter = adapter
             rc_products.layoutManager =
@@ -135,6 +141,12 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             insert_new_product.isVisible = it.identifier != USER
 
         }
+    }
+
+    private fun showDetailsProduct(idProduct: String) {
+        val intent = Intent(this, ProductDetails::class.java)
+        intent.putExtra("position", idProduct)
+        startActivity(intent)
     }
 
     companion object {

@@ -24,6 +24,7 @@ class ProdutosAdapter(
     var viewModel: ProductsViewModel,
     val userViewModel: UserViewModel,
     var context: Context,
+    val listener: (String) -> Unit
 ) : FirestoreRecyclerAdapter<Product, RecyclerView.ViewHolder>(options!!) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -46,6 +47,10 @@ class ProdutosAdapter(
             val intent = Intent(context, ProductUpdate::class.java)
             intent.putExtra("position", snapshots.getSnapshot(position).reference.id)
             context.startActivity(intent)
+        }
+
+        viewHolder.view.setOnClickListener {
+            listener.invoke(snapshots.getSnapshot(position).reference.id)
         }
     }
 
