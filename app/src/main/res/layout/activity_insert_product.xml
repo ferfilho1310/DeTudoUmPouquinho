@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_camera"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/dark_blue"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
@@ -87,7 +88,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/products_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="textAutoComplete"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +112,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/products_value"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +130,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/products_subtitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,8 +156,9 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_purple"
+        android:background="@color/dark_blue"
         android:text="Inserir Produto"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

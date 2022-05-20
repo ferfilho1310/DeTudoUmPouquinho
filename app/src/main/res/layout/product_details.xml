@@ -41,14 +41,13 @@
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tablayout_image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:layout_margin="12dp"
                         android:background="#CBCCD6"
                         app:tabBackground="@drawable/dot_selector"
                         app:tabGravity="center"
@@ -80,7 +79,6 @@
                     android:id="@+id/title_product"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="Iphone XR 13"
                     android:textColor="@color/black"
@@ -107,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="R$ 258,99"
-                    android:textColor="@android:color/holo_blue_dark"
+                    android:textColor="@color/dark_green"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/lojista"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -119,7 +117,7 @@
                 android:id="@+id/constraintLayout_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="24dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -158,8 +156,9 @@
         android:id="@+id/bt_fazer_pedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_500"
+        android:background="@drawable/effect_button"
         android:text="Fazer pedido"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

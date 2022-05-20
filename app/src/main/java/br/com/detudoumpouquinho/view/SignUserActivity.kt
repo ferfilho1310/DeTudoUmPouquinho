@@ -1,7 +1,11 @@
 package br.com.detudoumpouquinho.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +21,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private val userViewModel: UserViewModel by inject()
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_user_activity)

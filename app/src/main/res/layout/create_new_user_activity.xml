@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:paddingTop="16dp"
         android:text="Nos informe\n        alguns dados..."
-        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="32dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Seu nome"
-                android:inputType="textAutoComplete" />
+                android:inputType="textAutoComplete"
+                android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,14 +68,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Seu e-mail"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Digite sua senha"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Confirme sua senha"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -107,8 +110,9 @@
         android:id="@+id/create_user_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_purple"
-        android:text="Efetuar Cadastro"
+        android:background="@drawable/effect_button"
+        android:text="Cadastrar"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
