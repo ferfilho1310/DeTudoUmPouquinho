@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -44,9 +45,9 @@
         <ImageView
             android:id="@+id/img_produtos_main"
             android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/example_image"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,9 +57,9 @@
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:text="Shampoo EuMe 250ml"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/imageButton"
@@ -77,15 +78,26 @@
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
+        <TextView
+            android:id="@+id/payment_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Até 12 vezes no cartão"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toStartOf="@+id/product_value" />
+
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:layout_marginEnd="8dp"
             android:src="@drawable/ic_next"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -94,6 +106,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.50" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:background="@color/dark_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

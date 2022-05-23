@@ -11,8 +11,6 @@ data class Product(
     val subtitle: String? = null,
     val description: String? = null,
     val image: List<String>? = arrayListOf(),
-    val endereco: String? = null,
-    val numero: String? = null,
-    val bairro: String? = null,
-    val cidade: String? = null
+    val valueFrete: String? = null,
+    val paymentForm: String? = null
 ) : Parcelable

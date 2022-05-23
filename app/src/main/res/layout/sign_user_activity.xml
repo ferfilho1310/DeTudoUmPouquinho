@@ -126,7 +126,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_sign_user">
+        app:layout_constraintTop_toBottomOf="@+id/lottie">
 
         <TextView
             android:id="@+id/textView3"
@@ -153,5 +153,16 @@
             app:layout_constraintTop_toTopOf="@+id/textView3" />
     </LinearLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/bt_sign_user"
+        app:layout_constraintStart_toStartOf="@+id/bt_sign_user"
+        app:layout_constraintTop_toBottomOf="@+id/bt_sign_user"
+        app:lottie_url="https://assets5.lottiefiles.com/private_files/lf30_8ovwz3n6.json" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

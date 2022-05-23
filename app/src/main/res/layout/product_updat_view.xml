@@ -5,8 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-
     android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/img_close_product_update"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:src="@drawable/ic_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_products_imagens_update"
@@ -17,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_close_product_update"
         tools:itemCount="2" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -127,6 +135,34 @@
                 android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Forma de pagamento">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/product_payment_form_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Valor do frete">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/product_value_frete_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <Button
@@ -139,4 +175,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_update_product"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_update_procut"
+        app:layout_constraintEnd_toEndOf="@+id/bt_update_procut"
+        app:layout_constraintStart_toStartOf="@+id/bt_update_procut"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets5.lottiefiles.com/private_files/lf30_8ovwz3n6.json" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

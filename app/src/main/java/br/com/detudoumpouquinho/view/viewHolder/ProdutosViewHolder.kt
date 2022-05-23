@@ -23,6 +23,7 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
         val description = view.findViewById<TextView>(R.id.title)
         val delete = view.findViewById<ImageButton>(R.id.delete_products)
         val update = view.findViewById<ImageButton>(R.id.edit_products)
+        val paymentFormView = view.findViewById<TextView>(R.id.payment_form)
 
         viewModel.searchIdUserListener().observe(context as LifecycleOwner) {
             if(it.identifier != ProductsActivity.USER){
@@ -35,6 +36,7 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
             Glide.with(context).load(PhotosUtils.stringToBitMap(image?.get(0))).into(img)
             valu.text = value
             description.text = title
+            paymentFormView.text = paymentForm
         }
     }
 }

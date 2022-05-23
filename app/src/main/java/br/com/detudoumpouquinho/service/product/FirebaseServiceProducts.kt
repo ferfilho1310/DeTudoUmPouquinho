@@ -22,12 +22,16 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
     override fun insertNewProduct(product: Product) {
         val map: MutableMap<String, Any?> = HashMap()
 
-        map["description"] = product.description
-        map["image"] = product.image
-        map["subtitle"] = product.subtitle
-        map["title"] = product.title
-        map["value"] = product.value
-        map["titleUppercase"] = product.title?.uppercase()
+        product.let {
+            map["description"] = it.description
+            map["image"] = it.image
+            map["subtitle"] = it.subtitle
+            map["title"] = it.title
+            map["value"] = it.value
+            map["titleUppercase"] = it.title?.uppercase()
+            map["valueFrete"] = it.valueFrete
+            map["paymentForm"] = it.paymentForm
+        }
 
         firestoreInstance
             .collection("Products")
@@ -91,6 +95,8 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
             map["title"] = title
             map["value"] = value
             map["titleUppercase"] = title?.uppercase()
+            map["valueFrete"] = valueFrete
+            map["paymentForm"] = paymentForm
         }
 
         firestoreInstance

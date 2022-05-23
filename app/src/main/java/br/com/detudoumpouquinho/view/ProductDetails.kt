@@ -2,6 +2,7 @@ package br.com.detudoumpouquinho.view
 
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -32,12 +33,19 @@ class ProductDetails : AppCompatActivity() {
         viewPager.adapter = imageAdapter
         tablayout_image.setupWithViewPager(viewPager)
 
+        lottie_product_details.visibility = View.VISIBLE
+        viewPager.visibility = View.GONE
+
         viewModelProducts.buscarProdutosIdListener().observe(this) {
+            lottie_product_details.visibility = View.GONE
+            viewPager.visibility = View.VISIBLE
             it.image?.forEach { image ->
                 PhotosUtils.stringToBitMap(image).also { imageBitmap ->
                     imageBitmap?.let { it1 -> imageAdapter.setItems(it1) }
                 }
             }
+            title_product.text = it.title
+            value_product.text = it.value
         }
 
         img_close_product_detail.setOnClickListener {

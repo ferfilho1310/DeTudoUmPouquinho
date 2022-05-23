@@ -2,11 +2,7 @@ package br.com.detudoumpouquinho.view
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +13,7 @@ import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import kotlinx.android.synthetic.main.product_updat_view.*
+import kotlinx.android.synthetic.main.products_item_view_holder.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductUpdate : AppCompatActivity(), View.OnClickListener {
@@ -30,6 +27,8 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.product_updat_view)
+
+        supportActionBar?.hide()
 
         val bundle = intent.extras
         position = bundle?.getString("position").toString()
@@ -48,6 +47,8 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                 subtitle_updated.setText(it.subtitle)
                 description_update.setText(it.description)
                 value_update.setText(it.value)
+                product_payment_form_update.setText(it.paymentForm)
+                product_value_frete_update.setText(it.valueFrete)
             }
         }
 
@@ -60,8 +61,10 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
+            R.id.img_close_product_update -> intentProductActivity()
             R.id.fb_products_take_photo_update -> {
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val cameraIntent = Intent(Intent.ACTION_PICK)
+                cameraIntent.type = "image/*"
                 startActivityForResult(cameraIntent, CAMERA_REQUEST)
             }
             R.id.bt_update_procut -> {
@@ -73,12 +76,16 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                         subtitle_updated.error = "Digite o subtitulo"
                     }
                     else -> {
+                        lottie_update_product.visibility = View.VISIBLE
+                        bt_update_procut.visibility = View.GONE
                         val produto = Product(
                             title = title_updated.text.toString(),
                             subtitle = subtitle_updated.text.toString(),
                             image = photos,
                             value = value_update.text.toString(),
-                            description = description_update.text.toString()
+                            description = description_update.text.toString(),
+                            paymentForm = product_payment_form_update.text.toString(),
+                            valueFrete = product_value_frete_update.text.toString()
                         )
                         productsViewModel.updateProduct(position, produto)
                     }
@@ -119,6 +126,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
     private fun listeners() {
         fb_products_take_photo_update.setOnClickListener(this)
         bt_update_procut.setOnClickListener(this)
+        img_close_product_update.setOnClickListener(this)
     }
 
     override fun onBackPressed() {
@@ -129,9 +137,13 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
     private fun setObserver() {
         productsViewModel.updateProductListener().observe(this) {
             if (it == true) {
+                lottie_update_product.visibility = View.GONE
+                bt_update_procut.visibility = View.VISIBLE
                 intentProductActivity()
                 Toast.makeText(this, "Produto atualizado", Toast.LENGTH_SHORT).show();
             } else {
+                lottie_update_product.visibility = View.GONE
+                bt_update_procut.visibility = View.VISIBLE
                 Toast.makeText(this, "Falha ao atualizar produto", Toast.LENGTH_SHORT)
                     .show();
             }
@@ -140,6 +152,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
 
     private fun intentProductActivity() {
         val intent = Intent(this, ProductsActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }

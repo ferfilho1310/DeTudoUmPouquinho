@@ -23,11 +23,13 @@ import br.com.detudoumpouquinho.Utils.PhotosUtils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.activity_insert_product.*
 import org.koin.android.ext.android.inject
 
 
@@ -55,6 +57,9 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         val value = view.findViewById<TextInputEditText>(R.id.products_value)
         val subtitle = view.findViewById<TextInputEditText>(R.id.products_subtitle)
         val description = view.findViewById<TextInputEditText>(R.id.product_description)
+        val lottie = view.findViewById<LottieAnimationView>(R.id.lottie_insert_product)
+        val frete = view.findViewById<TextInputEditText>(R.id.product_value_frete)
+        val formaDePagamento = view.findViewById<TextInputEditText>(R.id.product_payment_form)
 
         viewf.setOnClickListener {
             val cameraIntent = Intent(Intent.ACTION_PICK)
@@ -67,19 +72,25 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         }
 
         insertbutton.setOnClickListener {
+            lottie.visibility = View.VISIBLE
+            insertbutton.visibility = View.GONE
             viewModel.insertProduct(
                 Product(
                     title = title.text.toString(),
                     value = value.text.toString(),
                     subtitle = subtitle.text.toString(),
                     description = description.text.toString(),
-                    image = photos
+                    image = photos,
+                    valueFrete = frete.text.toString(),
+                    paymentForm = formaDePagamento.text.toString()
                 )
             )
         }
 
         viewModel.insertProductListener().observe(requireActivity()) {
             if (it == true) {
+                lottie.visibility = View.GONE
+                insertbutton.visibility = View.VISIBLE
                 dismiss()
             } else {
                 Toast.makeText(
@@ -87,6 +98,8 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                     "Houve algum problema ao tentar inserir o produto",
                     Toast.LENGTH_SHORT
                 ).show()
+                lottie_insert_product.visibility = View.GONE
+                insertbutton.visibility = View.VISIBLE
             }
         }
 

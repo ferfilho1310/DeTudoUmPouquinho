@@ -39,6 +39,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
             R.id.bt_sign_user -> {
+                lottie.visibility = View.VISIBLE
+                bt_sign_user.visibility = View.GONE
                 setSignUserInformation()
             }
         }
@@ -61,6 +63,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun setObservers() {
         userViewModel.signUserListener().observe(this) {
             if (it == true) {
+                lottie.visibility = View.GONE
+                bt_sign_user.visibility = View.VISIBLE
                 startActivity(Intent(this, ProductsActivity::class.java))
                 finish()
             } else {
@@ -69,6 +73,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                     "Verifique o e-mail e a senha digitada.",
                     Toast.LENGTH_SHORT
                 ).show()
+                lottie.visibility = View.GONE
+                bt_sign_user.visibility = View.VISIBLE
             }
         }
     }
