@@ -48,5 +48,4 @@ class ProductsViewModel(
     }
 
     override fun buscarProdutosIdListener() = firebaseServiceProducts.buscarProdutosIdListener()
-
 }

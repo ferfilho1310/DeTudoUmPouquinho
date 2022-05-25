@@ -17,9 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
+            android:name=".view.SendRequestProduct"
+            android:exported="false" />
+        <activity
             android:name=".view.ProductDetails"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.SplashscreenActivity"
             android:exported="true"
@@ -45,8 +48,7 @@
         <activity
             android:name=".view.SignUserActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

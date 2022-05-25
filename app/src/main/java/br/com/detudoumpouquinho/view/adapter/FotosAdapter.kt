@@ -41,6 +41,6 @@ class FotosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private fun removeFoto(position: Int){
         listFotos.removeAt(position)
-        notifyItemRemoved(position)
+        notifyItemRangeRemoved(position, listFotos.size)
     }
 }

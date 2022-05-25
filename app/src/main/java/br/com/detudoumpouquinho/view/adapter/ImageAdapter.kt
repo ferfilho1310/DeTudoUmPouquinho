@@ -26,6 +26,7 @@ class ImageAdapter(val context: Context) : PagerAdapter() {
         val imageView = ImageView(context)
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         imageView.setImageBitmap(lsImage[position])
+        imageView.scaleType = ImageView.ScaleType.FIT_CENTER
         (container as ViewPager).addView(imageView, 0)
         return imageView
     }

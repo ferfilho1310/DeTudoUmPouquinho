@@ -72,36 +72,42 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         }
 
         insertbutton.setOnClickListener {
-            lottie.visibility = View.VISIBLE
-            insertbutton.visibility = View.GONE
-            viewModel.insertProduct(
-                Product(
-                    title = title.text.toString(),
-                    value = value.text.toString(),
-                    subtitle = subtitle.text.toString(),
-                    description = description.text.toString(),
-                    image = photos,
-                    valueFrete = frete.text.toString(),
-                    paymentForm = formaDePagamento.text.toString()
-                )
-            )
-        }
-
-        viewModel.insertProductListener().observe(requireActivity()) {
-            if (it == true) {
-                lottie.visibility = View.GONE
-                insertbutton.visibility = View.VISIBLE
-                dismiss()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Houve algum problema ao tentar inserir o produto",
-                    Toast.LENGTH_SHORT
-                ).show()
-                lottie_insert_product.visibility = View.GONE
-                insertbutton.visibility = View.VISIBLE
+            when {
+                photos.isNullOrEmpty() -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Você não tirou fotos do produto",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                title.text.toString().isEmpty() -> {
+                    title.error = "Informe seu e-mail"
+                }
+                value.text.toString().isEmpty() -> {
+                    value.error = "Informe seu e-mail"
+                }
+                description.text.toString().isEmpty() -> {
+                    description.error = "Informe seu e-mail"
+                }
+                else -> {
+                    lottie_insert_product.visibility = View.VISIBLE
+                    insertbutton.visibility = View.GONE
+                    viewModel.insertProduct(
+                        Product(
+                            title = title.text.toString(),
+                            value = value.text.toString(),
+                            subtitle = subtitle.text.toString(),
+                            description = description.text.toString(),
+                            image = photos,
+                            valueFrete = frete.text.toString(),
+                            paymentForm = formaDePagamento.text.toString()
+                        )
+                    )
+                }
             }
         }
+
+        setObserver(insertbutton)
 
         rc.adapter = adapter
         val layoutManager =
@@ -138,6 +144,24 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                     Toast.makeText(requireContext(), "Picture was not taken 2 ", Toast.LENGTH_SHORT)
                         .show();
                 }
+            }
+        }
+    }
+
+    private fun setObserver(insertbutton: View) {
+        viewModel.insertProductListener().observe(requireActivity()) {
+            if (it == true) {
+                lottie_insert_product.visibility = View.GONE
+                insertbutton.visibility = View.VISIBLE
+                dismiss()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Houve algum problema ao tentar inserir o produto",
+                    Toast.LENGTH_SHORT
+                ).show()
+                lottie_insert_product.visibility = View.GONE
+                insertbutton.visibility = View.VISIBLE
             }
         }
     }

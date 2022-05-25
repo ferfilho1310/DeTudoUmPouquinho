@@ -7,8 +7,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.Utils.PhotosUtils
+import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ImageAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import kotlinx.android.synthetic.main.product_details.*
@@ -19,6 +21,7 @@ class ProductDetails : AppCompatActivity() {
 
     val viewModelProducts: ProductsViewModel by viewModel()
     private var position = ""
+    var product: Product? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class ProductDetails : AppCompatActivity() {
 
         val imageAdapter = ImageAdapter(this)
         viewPager.adapter = imageAdapter
-        tablayout_image.setupWithViewPager(viewPager)
+        tablayout_image.setupWithViewPager(viewPager,true)
 
         lottie_product_details.visibility = View.VISIBLE
         viewPager.visibility = View.GONE
@@ -46,10 +49,22 @@ class ProductDetails : AppCompatActivity() {
             }
             title_product.text = it.title
             value_product.text = it.value
+            description_product_details.text = it.description
+            product = it
         }
 
         img_close_product_detail.setOnClickListener {
             finish()
+        }
+
+        bt_fazer_pedido.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("product",product)
+
+            val bottomSheetDialogFragment = SendRequestProduct()
+            bottomSheetDialogFragment.isCancelable = false
+            bottomSheetDialogFragment.arguments = bundle
+            bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
         }
     }
 }
