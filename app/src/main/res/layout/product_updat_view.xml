@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Descrição"
-                android:inputType="textAutoComplete"
+                android:inputType="textMultiLine"
                 android:theme="@style/EditTextTheme" />
 
         </com.google.android.material.textfield.TextInputLayout>

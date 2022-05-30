@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-core:20.1.0'
     implementation 'com.google.firebase:firebase-firestore:24.0.1'
+    implementation 'com.google.firebase:firebase-config-ktx:21.0.1'
 
     //Koin
     var koin_version= "3.2.0-beta-1"
