@@ -112,8 +112,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/effect_button"
         android:text="Cadastrar"
+        android:textSize="16sp"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

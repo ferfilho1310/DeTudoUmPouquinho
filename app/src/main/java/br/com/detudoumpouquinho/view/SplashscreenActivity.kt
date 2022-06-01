@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.onboarding.view.OnboardingActivity
 
 
 @SuppressLint("CustomSplashScreen")
@@ -18,7 +19,7 @@ class SplashscreenActivity : AppCompatActivity() {
 
         Handler().postDelayed(
             {
-                val i = Intent(this, SignUserActivity::class.java)
+                val i = Intent(this, OnboardingActivity::class.java)
                 startActivity(i)
                 finish()
             }, 3000
