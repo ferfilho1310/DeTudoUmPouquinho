@@ -1,13 +1,8 @@
 package br.com.detudoumpouquinho.view
 
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.Utils.PhotosUtils
 import br.com.detudoumpouquinho.model.Product
@@ -47,7 +42,7 @@ class ProductDetails : AppCompatActivity() {
                     imageBitmap?.let { it1 -> imageAdapter.setItems(it1) }
                 }
             }
-            title_product.text = it.title
+            title_product.text = it.nameProduct
             value_product.text = it.value
             description_product_details.text = it.description
             product = it

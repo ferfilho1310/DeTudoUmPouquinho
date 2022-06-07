@@ -5,11 +5,7 @@ import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +53,6 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         val value = view.findViewById<TextInputEditText>(R.id.products_value)
         val subtitle = view.findViewById<TextInputEditText>(R.id.products_subtitle)
         val description = view.findViewById<TextInputEditText>(R.id.product_description)
-        val lottie = view.findViewById<LottieAnimationView>(R.id.lottie_insert_product)
         val frete = view.findViewById<TextInputEditText>(R.id.product_value_frete)
         val formaDePagamento = view.findViewById<TextInputEditText>(R.id.product_payment_form)
 
@@ -94,9 +89,9 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                     insertbutton.visibility = View.GONE
                     viewModel.insertProduct(
                         Product(
-                            title = title.text.toString(),
+                            nameProduct = title.text.toString(),
                             value = value.text.toString(),
-                            subtitle = subtitle.text.toString(),
+                            seller = subtitle.text.toString(),
                             description = description.text.toString(),
                             image = photos,
                             valueFrete = frete.text.toString(),
@@ -124,6 +119,8 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     try {
+                        lnl_insert_image.visibility = View.GONE
+                        rc_products_imagens.visibility = View.VISIBLE
 
                         adapter.listFotos(PhotosUtils.uriToBitmap(data!!, requireContext().contentResolver).orEmpty())
                         context?.let {

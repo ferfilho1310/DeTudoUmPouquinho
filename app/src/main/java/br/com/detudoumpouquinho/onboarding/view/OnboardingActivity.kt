@@ -1,6 +1,8 @@
 package br.com.detudoumpouquinho.onboarding.view
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.onboarding.adapter.OnboardingItemsAdapter
 import br.com.detudoumpouquinho.onboarding.model.OnboardingItem
+import br.com.detudoumpouquinho.view.SendRequestProduct
 import br.com.detudoumpouquinho.view.SignUserActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
 
@@ -20,6 +23,7 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var onboardingItemsAdapter: OnboardingItemsAdapter
     private lateinit var indicatorContainer: LinearLayout
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +31,12 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
 
         supportActionBar?.hide()
 
+        sharedPreferences = getSharedPreferences(SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
+
         setOnboardingItems()
         setupIndicators()
         bt_onboading.setOnClickListener(this)
+        skipped.setOnClickListener(this)
     }
 
     private fun setOnboardingItems() {
@@ -103,10 +110,29 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when(p0?.id) {
             R.id.bt_onboading -> {
-                val i = Intent(this, SignUserActivity::class.java)
-                startActivity(i)
-                finish()
+                preferencesSkipped()
+                startSing()
+            }
+            R.id.skipped -> {
+                preferencesSkipped()
+                startSing()
             }
         }
+    }
+
+    private fun startSing(){
+        val i = Intent(this, SignUserActivity::class.java)
+        startActivity(i)
+        finish()
+    }
+
+    private fun preferencesSkipped(){
+        val result = sharedPreferences.edit()
+        result.putBoolean("skipped", true)
+        result.apply()
+    }
+
+    companion object {
+        val SKIPPED_ONBOARDING = "SKIPPED"
     }
 }

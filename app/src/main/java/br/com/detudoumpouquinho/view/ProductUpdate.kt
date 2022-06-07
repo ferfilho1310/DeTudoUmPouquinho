@@ -13,7 +13,6 @@ import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import kotlinx.android.synthetic.main.product_updat_view.*
-import kotlinx.android.synthetic.main.products_item_view_holder.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductUpdate : AppCompatActivity(), View.OnClickListener {
@@ -43,8 +42,8 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                     adapter.listFotos(image)
                     photos.add(image)
                 }
-                title_updated.setText(it.title)
-                subtitle_updated.setText(it.subtitle)
+                title_updated.setText(it.nameProduct)
+                subtitle_updated.setText(it.seller)
                 description_update.setText(it.description)
                 value_update.setText(it.value)
                 product_payment_form_update.setText(it.paymentForm)
@@ -79,8 +78,8 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                         lottie_update_product.visibility = View.VISIBLE
                         bt_update_procut.visibility = View.GONE
                         val produto = Product(
-                            title = title_updated.text.toString(),
-                            subtitle = subtitle_updated.text.toString(),
+                            nameProduct = title_updated.text.toString(),
+                            seller = subtitle_updated.text.toString(),
                             image = photos,
                             value = value_update.text.toString(),
                             description = description_update.text.toString(),

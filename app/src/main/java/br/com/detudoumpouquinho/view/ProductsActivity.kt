@@ -13,8 +13,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
@@ -48,9 +50,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setSearchView() {
-        searchView.onActionViewExpanded();
+        searchView.onActionViewExpanded()
         searchView.clearFocus()
-        searchView.queryHint = "Pesquisar produto"
+        searchView.queryHint = "Pesquisar"
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(p0: String?): Boolean {
@@ -68,6 +70,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         when (p0?.id) {
             R.id.insert_new_product -> {
                 val bottomSheetDialogFragment = InsertProductBottomFragment()
+                bottomSheetDialogFragment.isCancelable = false
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
             R.id.img_sair -> {
@@ -134,7 +137,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
             rc_products.adapter = adapter
             rc_products.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             rc_products.setHasFixedSize(true)
 
             adapter?.startListening()

@@ -25,10 +25,10 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
         product.let {
             map["description"] = it.description
             map["image"] = it.image
-            map["subtitle"] = it.subtitle
-            map["title"] = it.title
+            map["seller"] = it.seller
+            map["nameProduct"] = it.nameProduct
             map["value"] = it.value
-            map["titleUppercase"] = it.title?.uppercase()
+            map["nameProductUpperCase"] = it.nameProduct?.uppercase()
             map["valueFrete"] = it.valueFrete
             map["paymentForm"] = it.paymentForm
         }
@@ -91,10 +91,10 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
         model.apply {
             map["description"] = description
             map["image"] = image
-            map["subtitle"] = subtitle
-            map["title"] = title
+            map["subtitle"] = seller
+            map["title"] = nameProduct
             map["value"] = value
-            map["titleUppercase"] = title?.uppercase()
+            map["titleUppercase"] = nameProduct?.uppercase()
             map["valueFrete"] = valueFrete
             map["paymentForm"] = paymentForm
         }

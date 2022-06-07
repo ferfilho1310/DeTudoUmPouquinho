@@ -10,6 +10,7 @@
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_close.xml" value="0.268" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_edit_products.xml" value="0.268" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_exit.xml" value="0.268" />
+        <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_insert_photo.xml" value="0.2775" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_navigate_before.xml" value="0.268" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_navigate_next.xml" value="0.268" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/drawable/ic_next.xml" value="0.268" />
@@ -28,7 +29,7 @@
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/product_details.xml" value="0.25" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/product_updat_view.xml" value="0.33" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/products_activity.xml" value="0.25" />
-        <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/products_item_view_holder.xml" value="0.5" />
+        <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/products_item_view_holder.xml" value="0.33" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/send_request_product_fragment.xml" value="0.22402736212056434" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/sign_user_activity.xml" value="0.25" />
         <entry key="..\:/Users/Fernando/AndroidStudioProjects/Detudoumpouquinho/app/src/main/res/layout/splashscreen.xml" value="0.22402736212056434" />

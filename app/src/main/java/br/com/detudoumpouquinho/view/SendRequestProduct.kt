@@ -15,7 +15,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.service.remoteConfig.RemoteConfig
 import br.com.detudoumpouquinho.Utils.PhotosUtils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.viewModel.remoteConfig.RemoteConfigViewModel
@@ -68,7 +67,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
         extras.apply {
             Glide.with(requireActivity()).load(PhotosUtils.stringToBitMap(image?.get(0)))
                 .into(imgProduct)
-            nameProduct.text = title
+            nameProduct.text = this.nameProduct
             priceProduct.text = value
         }
 
@@ -78,7 +77,6 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
 
         finalizarPedido.setOnClickListener {
 
-            val contact = "+5531995394528"
             val text = StringBuilder()
             val textNoSalve = StringBuilder()
 
@@ -102,7 +100,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
                 )
             } else {
                 textNoSalve.apply {
-                    append("Olá, Gostaria de fazer o pedido de um(a) ${product.title} ")
+                    append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
                     append("no valor de ${product.value}.\n\n")
                     append("O endereço para envio é:\n Rua: ${rua.text.toString()}\n")
                     append("Número: ${numero.text.toString()}\n")
@@ -150,7 +148,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
         text: StringBuilder
     ): StringBuilder {
         return text.apply {
-            text.append("Olá, Gostaria de fazer o pedido de um(a) ${product.title} ")
+            text.append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
             text.append("no valor de ${product.value}.\n\n")
             text.append("O endereço para envio é:\n Rua: ${sharedPreferences?.getString("rua", "")}\n")
             text.append("Número: ${sharedPreferences?.getString("numero", "")}\n")

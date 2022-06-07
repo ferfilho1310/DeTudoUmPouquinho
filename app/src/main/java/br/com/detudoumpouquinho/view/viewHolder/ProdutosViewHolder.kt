@@ -35,7 +35,7 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
         produtos.apply {
             Glide.with(context).load(PhotosUtils.stringToBitMap(image?.get(0))).into(img)
             valu.text = value
-            description.text = title
+            description.text = nameProduct
             paymentFormView.text = paymentForm
         }
     }

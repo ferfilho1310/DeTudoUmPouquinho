@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:layout_marginTop="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:elevation="12dp"
     android:background="#CBCCD6"
+    android:elevation="12dp"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,39 +17,41 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/edit_products"
+        <LinearLayout
+            android:id="@+id/linearLayout5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:visibility="gone"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_edit_products"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/payment_form">
 
-        <ImageButton
-            android:id="@+id/delete_products"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            android:background="@android:color/white"
-            android:src="@drawable/ic_product_delete"
-            app:layout_constraintBottom_toBottomOf="@+id/edit_products"
-            app:layout_constraintEnd_toStartOf="@+id/edit_products"
-            app:layout_constraintTop_toTopOf="@+id/edit_products"
-            app:layout_constraintVertical_bias="1.0" />
+            <ImageButton
+                android:id="@+id/edit_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="@android:color/white"
+                android:src="@drawable/ic_edit_products"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/delete_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:src="@drawable/ic_product_delete"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/img_produtos_main"
-            android:layout_width="200dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:background="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,20 +59,21 @@
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
             android:text="Shampoo EuMe 250ml"
-            android:layout_marginStart="12dp"
             android:textColor="@android:color/black"
             android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
-            app:layout_constraintStart_toStartOf="@+id/guideline8"
-            app:layout_constraintTop_toBottomOf="@+id/delete_products" />
+            app:layout_constraintEnd_toEndOf="@+id/img_produtos_main"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_produtos_main" />
 
         <TextView
             android:id="@+id/product_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="R$ 50,00"
             android:textColor="@color/dark_green"
             android:textSize="16sp"
@@ -81,40 +85,30 @@
             android:id="@+id/payment_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:text="Até 12 vezes no cartão"
             android:textColor="@color/dark_blue"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
-            app:layout_constraintStart_toStartOf="@+id/product_value" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/product_value"
+            app:layout_constraintTop_toBottomOf="@+id/product_value" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline8"
+            android:id="@+id/guideline9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.50" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.60" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
-            android:layout_width="4dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="4dp"
             android:background="@color/dark_blue"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
