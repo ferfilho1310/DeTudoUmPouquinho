@@ -15,7 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.Utils.PhotosUtils
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.viewModel.remoteConfig.RemoteConfigViewModel
 import com.bumptech.glide.Glide
@@ -65,7 +65,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
         }
 
         extras.apply {
-            Glide.with(requireActivity()).load(PhotosUtils.stringToBitMap(image?.get(0)))
+            Glide.with(requireActivity()).load(Utils.stringToBitMap(image?.get(0)))
                 .into(imgProduct)
             nameProduct.text = this.nameProduct
             priceProduct.text = value

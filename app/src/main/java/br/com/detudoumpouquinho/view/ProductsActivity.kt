@@ -6,19 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
@@ -74,11 +70,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
             R.id.img_sair -> {
-                FirebaseAuth.getInstance().signOut().also {
-                    val i = Intent(this, SignUserActivity::class.java)
-                    startActivity(i)
-                    finish()
-                }
+                Utils.alertDialog(this, "Deseja sair da sua conta ?", ::signOut)
             }
         }
     }
@@ -89,6 +81,14 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             userViewModel.searchIdUser(
                 it.uid
             )
+        }
+    }
+
+    private fun signOut() {
+        FirebaseAuth.getInstance().signOut().also {
+            val i = Intent(this, SignUserActivity::class.java)
+            startActivity(i)
+            finish()
         }
     }
 
@@ -139,6 +139,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             rc_products.layoutManager =
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             rc_products.setHasFixedSize(true)
+            rc_products.isNestedScrollingEnabled = true
 
             adapter?.startListening()
         }

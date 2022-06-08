@@ -5,13 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.productsUtils.Utils.alertDialog
 import br.com.detudoumpouquinho.view.ProductUpdate
-import br.com.detudoumpouquinho.view.ProductsActivity
 import br.com.detudoumpouquinho.view.viewHolder.ProdutosViewHolder
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
@@ -40,13 +39,17 @@ class ProdutosAdapter(
         viewHolder.bind(model, userViewModel)
 
         viewHolder.view.delete_products.setOnClickListener {
-            deleteProduto(viewHolder.adapterPosition)
+            alertDialog(context, "Deseja realmente deletar este produto?") {
+                deleteProduto(viewHolder.adapterPosition)
+            }
         }
 
         viewHolder.view.edit_products.setOnClickListener {
-            val intent = Intent(context, ProductUpdate::class.java)
-            intent.putExtra("position", snapshots.getSnapshot(position).reference.id)
-            context.startActivity(intent)
+            alertDialog(context, "Deseja realmente editar os dados deste produto?") {
+                val intent = Intent(context, ProductUpdate::class.java)
+                intent.putExtra("position", snapshots.getSnapshot(position).reference.id)
+                context.startActivity(intent)
+            }
         }
 
         viewHolder.view.setOnClickListener {

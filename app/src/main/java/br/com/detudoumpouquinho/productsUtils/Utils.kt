@@ -1,6 +1,8 @@
-package br.com.detudoumpouquinho.Utils
+package br.com.detudoumpouquinho.productsUtils
 
+import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,7 +13,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 
-object PhotosUtils {
+object Utils {
 
     fun stringToBitMap(encodedString: String?): Bitmap? {
         return try {
@@ -59,5 +61,19 @@ object PhotosUtils {
             e.printStackTrace()
             return null
         }
+    }
+
+    fun alertDialog(
+        context: Context,
+        message: String,
+        positiveButton: () -> Unit
+    ) {
+        AlertDialog.Builder(context)
+            .setMessage(message)
+            .setNegativeButton("Não") { p0, _ ->
+                p0.dismiss()
+            }.setPositiveButton("Sim") { _, _ ->
+                positiveButton.invoke()
+            }.show()
     }
 }

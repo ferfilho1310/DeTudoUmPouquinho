@@ -8,11 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.Utils.PhotosUtils
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
-import kotlinx.android.synthetic.main.product_updat_view.*
+import kotlinx.android.synthetic.main.product_update_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductUpdate : AppCompatActivity(), View.OnClickListener {
@@ -25,7 +25,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.product_updat_view)
+        setContentView(R.layout.product_update_activity)
 
         supportActionBar?.hide()
 
@@ -100,9 +100,9 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                 Activity.RESULT_OK -> {
                     try {
                         adapter.listFotos(
-                            PhotosUtils.uriToBitmap(data!!, contentResolver).orEmpty()
+                            Utils.uriToBitmap(data!!, contentResolver).orEmpty()
                         )
-                        PhotosUtils.uriToBitmap(data, contentResolver)
+                        Utils.uriToBitmap(data, contentResolver)
                             .let { photos.add(it!!) }
 
                     } catch (e: Exception) {

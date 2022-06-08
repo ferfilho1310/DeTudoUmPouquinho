@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.Utils.PhotosUtils
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ImageAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
@@ -38,7 +38,7 @@ class ProductDetails : AppCompatActivity() {
             lottie_product_details.visibility = View.GONE
             viewPager.visibility = View.VISIBLE
             it.image?.forEach { image ->
-                PhotosUtils.stringToBitMap(image).also { imageBitmap ->
+                Utils.stringToBitMap(image).also { imageBitmap ->
                     imageBitmap?.let { it1 -> imageAdapter.setItems(it1) }
                 }
             }

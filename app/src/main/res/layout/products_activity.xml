@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#CBCCD6"
+    android:fitsSystemWindows="true"
     tools:context=".view.ProductsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lnl_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="32dp"
         android:background="@color/dark_blue"
+        android:elevation="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,8 +22,8 @@
             android:id="@+id/card_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/img_sair"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,8 +33,8 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:queryHint="Buscar Produtos"
                 android:background="@color/white"
+                android:queryHint="Buscar Produtos"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -53,9 +53,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sair"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:text="Sair"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/card_search"
             app:layout_constraintEnd_toEndOf="@+id/img_sair"
@@ -66,9 +66,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_products"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:nestedScrollingEnabled="true"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +83,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:visibility="gone"
         android:layout_marginBottom="12dp"
-        android:src="@drawable/ic_add"
         android:backgroundTint="@color/dark_blue"
+        android:src="@drawable/ic_add"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

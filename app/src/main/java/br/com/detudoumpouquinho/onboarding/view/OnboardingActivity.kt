@@ -48,7 +48,7 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
                 ),
                 OnboardingItem(
                     onboardingImage = "https://assets3.lottiefiles.com/packages/lf20_7wwm6az7.json",
-                    description = "Selecione o produto e entre em contato conosco."
+                    description = "Selecione o produto e informe seus dados para ser direcionado para nosso WhatsApp."
                 )
             )
         )

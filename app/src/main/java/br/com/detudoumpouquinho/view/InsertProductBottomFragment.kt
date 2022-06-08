@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +16,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.Utils.PhotosUtils
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
-import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -56,6 +56,8 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         val frete = view.findViewById<TextInputEditText>(R.id.product_value_frete)
         val formaDePagamento = view.findViewById<TextInputEditText>(R.id.product_payment_form)
 
+        value.setRawInputType(Configuration.KEYBOARD_12KEY)
+
         viewf.setOnClickListener {
             val cameraIntent = Intent(Intent.ACTION_PICK)
             cameraIntent.type = "image/*"
@@ -76,13 +78,13 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                     ).show()
                 }
                 title.text.toString().isEmpty() -> {
-                    title.error = "Informe seu e-mail"
+                    title.error = "Informe o nome do produto"
                 }
                 value.text.toString().isEmpty() -> {
-                    value.error = "Informe seu e-mail"
+                    value.error = "Informe o valor do produto"
                 }
                 description.text.toString().isEmpty() -> {
-                    description.error = "Informe seu e-mail"
+                    description.error = "Crie uma descrição do produto"
                 }
                 else -> {
                     lottie_insert_product.visibility = View.VISIBLE
@@ -122,9 +124,9 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                         lnl_insert_image.visibility = View.GONE
                         rc_products_imagens.visibility = View.VISIBLE
 
-                        adapter.listFotos(PhotosUtils.uriToBitmap(data!!, requireContext().contentResolver).orEmpty())
+                        adapter.listFotos(Utils.uriToBitmap(data!!, requireContext().contentResolver).orEmpty())
                         context?.let {
-                            PhotosUtils.uriToBitmap(data, requireContext().contentResolver)
+                            Utils.uriToBitmap(data, requireContext().contentResolver)
                                 .let { photos.add(it!!) }
                         }
 
