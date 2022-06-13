@@ -15,6 +15,7 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
     private val createUserListener: MutableLiveData<Boolean> = MutableLiveData()
     private val signUserListener: MutableLiveData<Boolean> = MutableLiveData()
     private val userListener: MutableLiveData<User> = MutableLiveData()
+    private val rescuePasswordListener: MutableLiveData<Boolean> = MutableLiveData()
 
     override fun insertNewUser(user: User) {
         firestoreCreateUserInstance
@@ -38,7 +39,10 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
     }
 
     override fun signUser(user: User) {
-        firestoreCreateUserInstance.signInWithEmailAndPassword(user.email.orEmpty(), user.password.orEmpty())
+        firestoreCreateUserInstance.signInWithEmailAndPassword(
+            user.email.orEmpty(),
+            user.password.orEmpty()
+        )
             .addOnSuccessListener {
                 signUserListener.value = true
             }.addOnFailureListener {
@@ -60,9 +64,19 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
             }
     }
 
+    override fun rescuePassWord(email: String) {
+        firestoreCreateUserInstance
+            .sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                rescuePasswordListener.value = task.isSuccessful
+            }
+    }
+
     override fun resultCreateUser() = createUserListener
 
     override fun resultSignUser() = signUserListener
 
     override fun searchIdUserListener() = userListener
+
+    override fun rescuePassWordListener() = rescuePasswordListener
 }

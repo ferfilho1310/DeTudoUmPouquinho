@@ -72,7 +72,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                         title_updated.error = "Digite o titulo"
                     }
                     subtitle_updated.text.toString().isEmpty() -> {
-                        subtitle_updated.error = "Digite o subtitulo"
+                        subtitle_updated.error = "Digite o nome do lojista"
                     }
                     else -> {
                         lottie_update_product.visibility = View.VISIBLE

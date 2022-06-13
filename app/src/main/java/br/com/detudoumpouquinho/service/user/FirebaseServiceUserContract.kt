@@ -11,4 +11,6 @@ interface FirebaseServiceUserContract {
     fun resultSignUser(): MutableLiveData<Boolean>
     fun searchIdUser(userId: String)
     fun searchIdUserListener(): MutableLiveData<User>
+    fun rescuePassWord(email: String)
+    fun rescuePassWordListener(): MutableLiveData<Boolean>
 }

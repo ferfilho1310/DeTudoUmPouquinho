@@ -68,7 +68,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
             Glide.with(requireActivity()).load(Utils.stringToBitMap(image?.get(0)))
                 .into(imgProduct)
             nameProduct.text = this.nameProduct
-            priceProduct.text = value
+            priceProduct.text = "R$ ".plus(value)
         }
 
         remoteConfig.fetchCelularListener().observe(requireActivity()) {
@@ -149,7 +149,7 @@ class SendRequestProduct : BottomSheetDialogFragment(), View.OnClickListener {
     ): StringBuilder {
         return text.apply {
             text.append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
-            text.append("no valor de ${product.value}.\n\n")
+            text.append("no valor de R$ ${product.value}.\n\n")
             text.append("O endereço para envio é:\n Rua: ${sharedPreferences?.getString("rua", "")}\n")
             text.append("Número: ${sharedPreferences?.getString("numero", "")}\n")
             text.append("Cidade: ${sharedPreferences?.getString("cidade", "")}\n")

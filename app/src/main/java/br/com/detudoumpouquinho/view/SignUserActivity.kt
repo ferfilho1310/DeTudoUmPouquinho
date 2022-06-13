@@ -1,7 +1,9 @@
 package br.com.detudoumpouquinho.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +28,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_user_activity)
 
+
         supportActionBar?.hide()
 
         setListeners()
@@ -41,21 +44,43 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
             R.id.bt_sign_user -> {
                 setSignUserInformation()
             }
+            R.id.tv_rescue_password -> {
+                val bottomSheetDialogFragment = RescuePasswordFragment()
+                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
+            }
+            R.id.bt_sign_without_registration -> {
+                val sharedPreferences =
+                    getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+                val edit = sharedPreferences.edit()
+                edit.putBoolean("semcadastro", true)
+                edit.apply()
+
+                startProductActivity()
+            }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            val intent = Intent(this, ProductsActivity::class.java)
-            startActivity(intent)
-            finish()
+        val sharedPreferences = getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+        if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+            startProductActivity()
+        } else if (FirebaseAuth.getInstance().currentUser != null) {
+            startProductActivity()
         }
+    }
+
+    private fun startProductActivity() {
+        val intent = Intent(this, ProductsActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun setListeners() {
         tx_sign_up.setOnClickListener(this)
         bt_sign_user.setOnClickListener(this)
+        tv_rescue_password.setOnClickListener(this)
+        bt_sign_without_registration.setOnClickListener(this)
     }
 
     private fun setObservers() {
@@ -96,5 +121,9 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
         }
+    }
+
+    companion object {
+        const val WITHOUT_REGISTRATION = "WITHOUT_REGISTRATION"
     }
 }

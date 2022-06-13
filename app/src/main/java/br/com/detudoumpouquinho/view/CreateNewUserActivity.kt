@@ -1,6 +1,8 @@
 package br.com.detudoumpouquinho.view
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -28,12 +30,31 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.create_user_button -> {
+                val sharedPreferences =
+                    getSharedPreferences(
+                        SignUserActivity.WITHOUT_REGISTRATION,
+                        Context.MODE_PRIVATE
+                    )
+                val edit = sharedPreferences.edit()
+                edit.putBoolean("semcadastro", false)
+                edit.apply()
+
                 setInformationUser()
             }
             R.id.back_sign_user -> {
-                backSignActivity()
+                val  sharedPreferences = getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+                if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+                    finish()
+                } else {
+                    backSignActivity()
+                }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
     private fun setListeners() {

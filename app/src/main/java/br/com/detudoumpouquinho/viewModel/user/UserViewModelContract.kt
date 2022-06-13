@@ -10,4 +10,6 @@ interface UserViewModelContract {
     fun signUserListener(): MutableLiveData<Boolean>
     fun searchIdUser(userId: String)
     fun searchIdUserListener(): MutableLiveData<User>
+    fun rescuePassWord(email: String)
+    fun rescuePassWordListener(): MutableLiveData<Boolean>
 }

@@ -62,10 +62,10 @@ class ProdutosAdapter(
         viewModel.deleteProduct(product)
         viewModel.deleteProductListener().observe(context as LifecycleOwner) {
             if (it == true) {
-                Toast.makeText(context, "Cliente deletado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Produto deletado", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(context, "Erro ao deletar produto", Toast.LENGTH_SHORT)
-                    .show();
+                    .show()
             }
         }
     }

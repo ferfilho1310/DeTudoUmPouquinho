@@ -2,7 +2,9 @@ package br.com.detudoumpouquinho.view
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -34,7 +36,6 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
-        permissions()
         setObservers()
         productsViewModel.loadProducts()
         supportActionBar?.hide()
@@ -77,10 +78,22 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
+        val sharedPreferences =
+            getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            img_sair.visibility = View.VISIBLE
+            tv_sair.visibility = View.VISIBLE
+        } else if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+            img_sair.visibility = View.GONE
+            tv_sair.visibility = View.GONE
+        }
+
         FirebaseAuth.getInstance().currentUser?.let {
             userViewModel.searchIdUser(
                 it.uid
             )
+        } ?: run {
+            insert_new_product.isVisible = false
         }
     }
 
@@ -145,8 +158,10 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         userViewModel.searchIdUserListener().observe(this) {
-            insert_new_product.isVisible = it.identifier != USER
-
+            if (it.identifier != USER) {
+                permissions()
+                insert_new_product.isVisible = true
+            }
         }
     }
 
