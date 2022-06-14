@@ -119,4 +119,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_create_user"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/create_user_button"
+        app:layout_constraintEnd_toEndOf="@+id/create_user_button"
+        app:layout_constraintStart_toStartOf="@+id/create_user_button"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets5.lottiefiles.com/private_files/lf30_8ovwz3n6.json" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

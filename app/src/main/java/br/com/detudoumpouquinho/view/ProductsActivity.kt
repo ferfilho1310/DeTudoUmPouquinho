@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -42,6 +43,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
         insert_new_product.setOnClickListener(this)
         img_sair.setOnClickListener(this)
+        card_notification.setOnClickListener(this)
 
         setSearchView()
     }
@@ -73,6 +75,10 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.img_sair -> {
                 Utils.alertDialog(this, "Deseja sair da sua conta ?", ::signOut)
             }
+            R.id.card_notification -> {
+                val i = Intent(this, CreateNewUserActivity::class.java)
+                startActivity(i)
+            }
         }
     }
 
@@ -80,12 +86,15 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         val sharedPreferences =
             getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+
         if (FirebaseAuth.getInstance().currentUser != null) {
             img_sair.visibility = View.VISIBLE
             tv_sair.visibility = View.VISIBLE
+            card_notification.visibility = View.GONE
         } else if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
             img_sair.visibility = View.GONE
             tv_sair.visibility = View.GONE
+            card_notification.visibility = View.VISIBLE
         }
 
         FirebaseAuth.getInstance().currentUser?.let {
@@ -169,6 +178,13 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, ProductDetails::class.java)
         intent.putExtra("position", idProduct)
         startActivity(intent)
+    }
+
+    fun loadAds() {
+       /* MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder()
+            .build()
+        adView_products.loadAd(adRequest)*/
     }
 
     companion object {

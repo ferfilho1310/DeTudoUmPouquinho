@@ -72,7 +72,7 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
     }
 
     override fun buscarProdutos(nomeProduto: String) {
-        query = firestoreInstance.collection("Products").orderBy("titleUppercase").startAt(
+        query = firestoreInstance.collection("Products").orderBy("nameProductUpperCase").startAt(
             nomeProduto.uppercase(
                 Locale.getDefault()
             )
@@ -88,15 +88,15 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
     override fun updateProduct(documentId: String, model: Product) {
         val map: MutableMap<String, Any?> = HashMap()
 
-        model.apply {
-            map["description"] = description
-            map["image"] = image
-            map["subtitle"] = seller
-            map["title"] = nameProduct
-            map["value"] = value
-            map["titleUppercase"] = nameProduct?.uppercase()
-            map["valueFrete"] = valueFrete
-            map["paymentForm"] = paymentForm
+        model.let {
+            map["description"] = it.description
+            map["image"] = it.image
+            map["seller"] = it.seller
+            map["nameProduct"] = it.nameProduct
+            map["value"] = it.value
+            map["nameProductUpperCase"] = it.nameProduct?.uppercase()
+            map["valueFrete"] = it.valueFrete
+            map["paymentForm"] = it.paymentForm
         }
 
         firestoreInstance

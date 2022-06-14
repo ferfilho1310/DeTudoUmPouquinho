@@ -30,19 +30,14 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.create_user_button -> {
-                val sharedPreferences =
-                    getSharedPreferences(
-                        SignUserActivity.WITHOUT_REGISTRATION,
-                        Context.MODE_PRIVATE
-                    )
-                val edit = sharedPreferences.edit()
-                edit.putBoolean("semcadastro", false)
-                edit.apply()
 
                 setInformationUser()
             }
             R.id.back_sign_user -> {
-                val  sharedPreferences = getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+                val sharedPreferences = getSharedPreferences(
+                    SignUserActivity.WITHOUT_REGISTRATION,
+                    Context.MODE_PRIVATE
+                )
                 if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
                     finish()
                 } else {
@@ -65,8 +60,31 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun setObservers() {
         userViewModel.createUserListener().observe(this) {
             if (it == true) {
-                backSignActivity()
+                lottie_create_user.visibility = View.GONE
+                create_user_button.visibility = View.VISIBLE
+                val sharedPreferences =
+                    getSharedPreferences(
+                        SignUserActivity.WITHOUT_REGISTRATION,
+                        Context.MODE_PRIVATE
+                    )
+
+                if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+                    val edit = sharedPreferences.edit()
+                    edit.putBoolean("semcadastro", false)
+                    edit.apply()
+                    finish()
+                } else {
+                    backSignActivity()
+                }
+
+                Toast.makeText(
+                    this,
+                    "Usuário criado com sucesso",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
+                lottie_create_user.visibility = View.GONE
+                create_user_button.visibility = View.VISIBLE
                 Toast.makeText(
                     this,
                     "Verifique seu e-mail ou se a senha tem mais de 6 caracteres.",
@@ -98,6 +116,8 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                 ).show()
             }
             else -> {
+                lottie_create_user.visibility = View.VISIBLE
+                create_user_button.visibility = View.GONE
                 userViewModel.createUser(
                     User(
                         name = create_name.text.toString(),
