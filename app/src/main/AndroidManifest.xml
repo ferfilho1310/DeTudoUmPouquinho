@@ -51,6 +51,9 @@
             android:name=".view.SignUserActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
-    </application>
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2528240545678093~4377927159"/>
+    </application>
 </manifest>

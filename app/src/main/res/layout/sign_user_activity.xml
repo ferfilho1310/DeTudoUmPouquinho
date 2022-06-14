@@ -239,7 +239,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_border"
-        android:text="Entrar sem cadastro"
+        android:text="Entrar como visitante"
         android:layout_marginTop="32dp"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"

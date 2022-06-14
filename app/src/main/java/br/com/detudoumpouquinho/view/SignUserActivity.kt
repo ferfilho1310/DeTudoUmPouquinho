@@ -55,17 +55,14 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 edit.putBoolean("semcadastro", true)
                 edit.apply()
 
-                startProductActivity()
+                startProductActivityWithOutFinish()
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        val sharedPreferences = getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
-        if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
-            startProductActivity()
-        } else if (FirebaseAuth.getInstance().currentUser != null) {
+       if (FirebaseAuth.getInstance().currentUser != null) {
             startProductActivity()
         }
     }
@@ -74,6 +71,11 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, ProductsActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun startProductActivityWithOutFinish() {
+        val intent = Intent(this, ProductsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setListeners() {

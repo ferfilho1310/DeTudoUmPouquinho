@@ -11,6 +11,8 @@ import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.view.adapter.ImageAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.product_details.*
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +28,9 @@ class ProductDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.product_details)
         supportActionBar?.hide()
+
+        MobileAds.initialize(this)
+        loadAds()
 
         val bundle = intent.extras
         position = bundle?.getString("position").toString()
@@ -70,7 +75,14 @@ class ProductDetails : AppCompatActivity() {
                 bottomSheetDialogFragment.arguments = bundle
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
-
         }
+    }
+
+    private fun loadAds() {
+        val adRequest = AdRequest
+            .Builder()
+            .build()
+
+        adview_product_details.loadAd(adRequest)
     }
 }

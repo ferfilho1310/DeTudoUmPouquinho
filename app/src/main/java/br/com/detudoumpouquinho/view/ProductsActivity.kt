@@ -22,9 +22,13 @@ import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -37,6 +41,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
+
+        MobileAds.initialize(this)
+
         setObservers()
         productsViewModel.loadProducts()
         supportActionBar?.hide()
@@ -46,6 +53,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         card_notification.setOnClickListener(this)
 
         setSearchView()
+        loadAds()
     }
 
     private fun setSearchView() {
@@ -180,11 +188,12 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         startActivity(intent)
     }
 
-    fun loadAds() {
-       /* MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder()
+    private fun loadAds() {
+        val adRequest = AdRequest
+            .Builder()
             .build()
-        adView_products.loadAd(adRequest)*/
+
+        adview.loadAd(adRequest)
     }
 
     companion object {
