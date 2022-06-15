@@ -27,6 +27,8 @@ class ProductDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.product_details)
+
+        window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
         MobileAds.initialize(this)

@@ -21,6 +21,7 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_new_user_activity)
 
+        window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
         setObservers()
@@ -30,7 +31,6 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.create_user_button -> {
-
                 setInformationUser()
             }
             R.id.back_sign_user -> {

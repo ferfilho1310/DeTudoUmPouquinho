@@ -28,7 +28,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_user_activity)
 
-
+        window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
         setListeners()
@@ -55,14 +55,14 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 edit.putBoolean("semcadastro", true)
                 edit.apply()
 
-                startProductActivityWithOutFinish()
+                startProductActivity()
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-       if (FirebaseAuth.getInstance().currentUser != null) {
+        if (FirebaseAuth.getInstance().currentUser != null) {
             startProductActivity()
         }
     }
@@ -71,11 +71,6 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, ProductsActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun startProductActivityWithOutFinish() {
-        val intent = Intent(this, ProductsActivity::class.java)
-        startActivity(intent)
     }
 
     private fun setListeners() {
@@ -90,8 +85,16 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
             if (it == true) {
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
+
                 startActivity(Intent(this, ProductsActivity::class.java))
                 finish()
+
+                val sharedPreferences =
+                    getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+                val edit = sharedPreferences.edit()
+                edit.putBoolean("semcadastro", false)
+                edit.apply()
+
             } else {
                 Toast.makeText(
                     this,

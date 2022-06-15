@@ -21,12 +21,13 @@ class SplashscreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splashscreen)
 
+        supportActionBar?.hide()
+        window.navigationBarColor = resources.getColor(R.color.light_blue)
+
         sharedPreferences =
             getSharedPreferences(OnboardingActivity.SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
 
         result = sharedPreferences.getBoolean("skipped", false)
-
-        supportActionBar?.hide()
 
         Handler().postDelayed(
             {

@@ -42,6 +42,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
 
+        window.navigationBarColor = resources.getColor(R.color.dark_blue)
         MobileAds.initialize(this)
 
         setObservers()
@@ -84,8 +85,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 Utils.alertDialog(this, "Deseja sair da sua conta ?", ::signOut)
             }
             R.id.card_notification -> {
-                val i = Intent(this, CreateNewUserActivity::class.java)
+                val i = Intent(this, SignUserActivity::class.java)
                 startActivity(i)
+                finish()
             }
         }
     }
@@ -117,6 +119,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     private fun signOut() {
         FirebaseAuth.getInstance().signOut().also {
             val i = Intent(this, SignUserActivity::class.java)
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(i)
             finish()
         }

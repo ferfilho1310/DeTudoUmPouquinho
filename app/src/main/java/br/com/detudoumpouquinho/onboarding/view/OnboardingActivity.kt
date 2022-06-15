@@ -29,6 +29,7 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
         sharedPreferences = getSharedPreferences(SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
