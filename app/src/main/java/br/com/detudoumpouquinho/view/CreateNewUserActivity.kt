@@ -47,11 +47,6 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
-
     private fun setListeners() {
         create_user_button.setOnClickListener(this)
         back_sign_user.setOnClickListener(this)
@@ -91,6 +86,25 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        val sharedPreferences =
+            getSharedPreferences(
+                SignUserActivity.WITHOUT_REGISTRATION,
+                Context.MODE_PRIVATE
+            )
+
+        if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+            val edit = sharedPreferences.edit()
+            edit.putBoolean("semcadastro", false)
+            edit.apply()
+            finish()
+        } else {
+            backSignActivity()
         }
     }
 

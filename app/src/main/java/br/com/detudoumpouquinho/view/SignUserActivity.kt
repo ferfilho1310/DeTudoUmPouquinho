@@ -62,7 +62,12 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
+        val sharedPreferences =
+            getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+
         if (FirebaseAuth.getInstance().currentUser != null) {
+            startProductActivity()
+        } else if (sharedPreferences?.getBoolean("semcadastro", false) == true){
             startProductActivity()
         }
     }
@@ -86,14 +91,16 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
 
-                startActivity(Intent(this, ProductsActivity::class.java))
-                finish()
+                startProductActivity()
 
                 val sharedPreferences =
                     getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
                 val edit = sharedPreferences.edit()
                 edit.putBoolean("semcadastro", false)
                 edit.apply()
+
+                bt_sign_without_registration.isEnabled = false
+                tx_sign_up.isEnabled = false
 
             } else {
                 Toast.makeText(
@@ -103,6 +110,9 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 ).show()
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
+
+                bt_sign_without_registration.isEnabled = true
+                tx_sign_up.isEnabled = true
             }
         }
     }
