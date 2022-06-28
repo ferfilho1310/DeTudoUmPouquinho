@@ -11,15 +11,12 @@ class MessagingService: FirebaseMessagingService() {
 
     val token = FirebaseMessaging.getInstance().token.addOnCompleteListener {
         if (!it.isSuccessful) {
-            Log.w("TAG", "Fetching FCM registration token failed", it.exception)
+            Log.w("TAG", "Falha ao receber o push", it.exception)
             return@addOnCompleteListener
         }
 
-        // Get new FCM registration token
         val token = it.result
 
         Log.w("TAG", "TOKEN $token")
-
-        Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
     }
 }

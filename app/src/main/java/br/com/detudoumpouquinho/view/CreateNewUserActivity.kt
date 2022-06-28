@@ -33,17 +33,7 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
             R.id.create_user_button -> {
                 setInformationUser()
             }
-            R.id.back_sign_user -> {
-                val sharedPreferences = getSharedPreferences(
-                    SignUserActivity.WITHOUT_REGISTRATION,
-                    Context.MODE_PRIVATE
-                )
-                if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
-                    finish()
-                } else {
-                    backSignActivity()
-                }
-            }
+            R.id.back_sign_user -> finish()
         }
     }
 
@@ -63,13 +53,13 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                         Context.MODE_PRIVATE
                     )
 
-                if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+                if (sharedPreferences?.getBoolean("semcadastro", false) == true){
                     val edit = sharedPreferences.edit()
                     edit.putBoolean("semcadastro", false)
                     edit.apply()
                     finish()
                 } else {
-                    backSignActivity()
+                    startProductActivity()
                 }
 
                 Toast.makeText(
@@ -89,23 +79,15 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun startProductActivity() {
+        val intent = Intent(this, ProductsActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
-
-        val sharedPreferences =
-            getSharedPreferences(
-                SignUserActivity.WITHOUT_REGISTRATION,
-                Context.MODE_PRIVATE
-            )
-
-        if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
-            val edit = sharedPreferences.edit()
-            edit.putBoolean("semcadastro", false)
-            edit.apply()
-            finish()
-        } else {
-            backSignActivity()
-        }
+        finish()
     }
 
     private fun setInformationUser() {
@@ -142,10 +124,5 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
         }
-    }
-
-    private fun backSignActivity() {
-        startActivity(Intent(this, SignUserActivity::class.java))
-        finish()
     }
 }

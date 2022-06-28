@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.onboarding.adapter.OnboardingItemsAdapter
 import br.com.detudoumpouquinho.onboarding.model.OnboardingItem
+import br.com.detudoumpouquinho.view.ProductsActivity
 import br.com.detudoumpouquinho.view.SendRequestProduct
 import br.com.detudoumpouquinho.view.SignUserActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
@@ -112,17 +113,17 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
         when(p0?.id) {
             R.id.bt_onboading -> {
                 preferencesSkipped()
-                startSing()
+                startProducts()
             }
             R.id.skipped -> {
                 preferencesSkipped()
-                startSing()
+                startProducts()
             }
         }
     }
 
-    private fun startSing(){
-        val i = Intent(this, SignUserActivity::class.java)
+    private fun startProducts(){
+        val i = Intent(this, ProductsActivity::class.java)
         startActivity(i)
         finish()
     }

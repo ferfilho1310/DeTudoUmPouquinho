@@ -44,7 +44,7 @@ class SplashscreenActivity : AppCompatActivity() {
     }
 
     private fun startSing() {
-        val i = Intent(this, SignUserActivity::class.java)
+        val i = Intent(this, ProductsActivity::class.java)
         startActivity(i)
         finish()
     }

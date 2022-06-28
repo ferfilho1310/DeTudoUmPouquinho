@@ -25,7 +25,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -37,10 +40,13 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     private var options: FirestoreRecyclerOptions<Product>? = null
     private var adapter: ProdutosAdapter? = null
     private val RECORD_REQUEST_CODE = 101
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.products_activity)
+
+        firebaseAnalytics = Firebase.analytics
 
         window.navigationBarColor = resources.getColor(R.color.dark_blue)
         MobileAds.initialize(this)
@@ -50,8 +56,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.hide()
 
         insert_new_product.setOnClickListener(this)
-        img_sair.setOnClickListener(this)
-        card_notification.setOnClickListener(this)
+        img_profile.setOnClickListener(this)
 
         setSearchView()
         loadAds()
@@ -81,31 +86,15 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
                 bottomSheetDialogFragment.isCancelable = false
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
-            R.id.img_sair -> {
-                Utils.alertDialog(this, "Deseja sair da sua conta ?", ::signOut)
-            }
-            R.id.card_notification -> {
-                val i = Intent(this, SignUserActivity::class.java)
-                startActivity(i)
-                finish()
+            R.id.img_profile -> {
+                val bottomSheetDialogFragment = ProfileBottomFragment()
+                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        val sharedPreferences =
-            getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
-
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            img_sair.visibility = View.VISIBLE
-            tv_sair.visibility = View.VISIBLE
-            card_notification.visibility = View.GONE
-        } else if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
-            img_sair.visibility = View.GONE
-            tv_sair.visibility = View.GONE
-            card_notification.visibility = View.VISIBLE
-        }
 
         FirebaseAuth.getInstance().currentUser?.let {
             userViewModel.searchIdUser(
@@ -113,15 +102,6 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             )
         } ?: run {
             insert_new_product.isVisible = false
-        }
-    }
-
-    private fun signOut() {
-        FirebaseAuth.getInstance().signOut().also {
-            val i = Intent(this, SignUserActivity::class.java)
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(i)
-            finish()
         }
     }
 

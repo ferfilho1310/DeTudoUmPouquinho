@@ -3,19 +3,13 @@ package br.com.detudoumpouquinho.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.create_new_user_activity.*
 import kotlinx.android.synthetic.main.sign_user_activity.*
 import org.koin.android.ext.android.inject
 
@@ -37,38 +31,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.tx_sign_up -> {
-                startActivity(Intent(this, CreateNewUserActivity::class.java))
-                finish()
-            }
-            R.id.bt_sign_user -> {
-                setSignUserInformation()
-            }
-            R.id.tv_rescue_password -> {
-                val bottomSheetDialogFragment = RescuePasswordFragment()
-                bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
-            }
-            R.id.bt_sign_without_registration -> {
-                val sharedPreferences =
-                    getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
-                val edit = sharedPreferences.edit()
-                edit.putBoolean("semcadastro", true)
-                edit.apply()
-
-                startProductActivity()
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val sharedPreferences =
-            getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
-
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            startProductActivity()
-        } else if (sharedPreferences?.getBoolean("semcadastro", false) == true){
-            startProductActivity()
+            R.id.bt_sign_user -> setSignUserInformation()
+            R.id.img_back -> finish()
         }
     }
 
@@ -79,10 +43,8 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setListeners() {
-        tx_sign_up.setOnClickListener(this)
         bt_sign_user.setOnClickListener(this)
-        tv_rescue_password.setOnClickListener(this)
-        bt_sign_without_registration.setOnClickListener(this)
+        img_back.setOnClickListener(this)
     }
 
     private fun setObservers() {
@@ -99,9 +61,6 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 edit.putBoolean("semcadastro", false)
                 edit.apply()
 
-                bt_sign_without_registration.isEnabled = false
-                tx_sign_up.isEnabled = false
-
             } else {
                 Toast.makeText(
                     this,
@@ -111,8 +70,6 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
 
-                bt_sign_without_registration.isEnabled = true
-                tx_sign_up.isEnabled = true
             }
         }
     }

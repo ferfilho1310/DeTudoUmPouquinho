@@ -73,7 +73,6 @@ class ProductDetails : AppCompatActivity() {
                 bundle.putParcelable("product", product)
 
                 val bottomSheetDialogFragment = SendRequestProduct()
-                bottomSheetDialogFragment.isCancelable = false
                 bottomSheetDialogFragment.arguments = bundle
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
