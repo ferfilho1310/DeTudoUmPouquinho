@@ -1,6 +1,8 @@
 package br.com.detudoumpouquinho.view
 
 import android.app.Dialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.rescue_password_fragment.*
 import org.koin.android.ext.android.inject
 
@@ -51,13 +54,33 @@ class RescuePasswordFragment : BottomSheetDialogFragment() {
         viewModel.rescuePassWordListener().observe(this) {
             if (it == true) {
                 dismiss()
+
+                 val i = Intent(
+                     requireActivity(),
+                        SignUserActivity::class.java
+                    )
+                requireActivity().startActivity(i)
+                requireActivity().finish()
+
+                val sharedPreferences =
+                    requireActivity().getSharedPreferences(
+                        SignUserActivity.WITHOUT_REGISTRATION,
+                        Context.MODE_PRIVATE
+                    )
+
+                FirebaseAuth.getInstance().signOut().also {
+                    sharedPreferences.edit().clear().apply()
+
+                }
+
                 btRescuePassWord.visibility = View.VISIBLE
                 lottieRescuePassword.visibility = View.GONE
+
                 Toast.makeText(
                     context,
                     "Foi enviado um e-mail de reset da senha para o e-mail informado",
                     Toast.LENGTH_LONG
-                ).show();
+                ).show()
             } else {
                 btRescuePassWord.visibility = View.VISIBLE
                 lottieRescuePassword.visibility = View.GONE

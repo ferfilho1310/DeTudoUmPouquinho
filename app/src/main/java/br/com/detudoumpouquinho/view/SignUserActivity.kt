@@ -58,7 +58,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 val sharedPreferences =
                     getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
                 val edit = sharedPreferences.edit()
-                edit.putBoolean("semcadastro", false)
+                edit.putBoolean("semcadastro", true)
                 edit.apply()
 
             } else {

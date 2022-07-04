@@ -53,13 +53,11 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                         Context.MODE_PRIVATE
                     )
 
-                if (sharedPreferences?.getBoolean("semcadastro", false) == true){
+                if (sharedPreferences?.getBoolean("semcadastro", false) != true){
                     val edit = sharedPreferences.edit()
-                    edit.putBoolean("semcadastro", false)
+                    edit.putBoolean("semcadastro", true)
                     edit.apply()
                     finish()
-                } else {
-                    startProductActivity()
                 }
 
                 Toast.makeText(

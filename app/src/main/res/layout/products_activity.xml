@@ -24,11 +24,11 @@
             android:id="@+id/img_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:background="@color/dark_blue"
-            android:src="@drawable/ic_person"
+            android:src="@drawable/ic_person_solid"
             android:visibility="visible"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/card_search" />
 
         <TextView
@@ -36,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Perfil"
+            android:layout_marginTop="-4dp"
             android:textColor="@color/white"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/card_search"
             app:layout_constraintEnd_toEndOf="@+id/img_profile"
             app:layout_constraintStart_toStartOf="@+id/img_profile"
             app:layout_constraintTop_toBottomOf="@+id/img_profile" />
@@ -49,11 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
             android:layout_marginStart="8dp"
-            app:cardCornerRadius="24dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_profile"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/img_profile"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.SearchView
@@ -69,43 +68,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_notification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="visible"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lnl_search">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:padding="8dp"
-            android:text="Você entrou como visitante. Clique neste banner parar efetuar seu cadastro ou login."
-            android:textColor="@color/light_blue"
-            android:textStyle="bold" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_notification_sign_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:cardCornerRadius="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_notification"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_products"
         android:layout_width="match_parent"
@@ -117,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_notification_sign_user"
+        app:layout_constraintTop_toBottomOf="@+id/lnl_search"
         app:spanCount="2"
         tools:listitem="@layout/products_item_view_holder" />
 

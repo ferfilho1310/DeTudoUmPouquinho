@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.productsUtils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -29,6 +30,32 @@ class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener 
         val cadastrar = view.findViewById<TextView>(R.id.tv_sign_up)
         val trocarSenha = view.findViewById<TextView>(R.id.tv_change_password)
         val sair = view.findViewById<TextView>(R.id.tv_sign_out)
+        val view1 = view.findViewById<View>(R.id.view1)
+        val view2 = view.findViewById<View>(R.id.view2)
+        val view3 = view.findViewById<View>(R.id.view3)
+        val view4 = view.findViewById<View>(R.id.view4)
+
+        val sharedPreferences =
+            requireActivity().getSharedPreferences(
+                SignUserActivity.WITHOUT_REGISTRATION,
+                Context.MODE_PRIVATE
+            )
+
+        if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+            entrar.isVisible = false
+            cadastrar.isVisible = false
+            sair.isVisible = true
+            trocarSenha.isVisible = true
+            view1.isVisible = false
+            view2.isVisible = false
+        } else {
+            entrar.isVisible = true
+            cadastrar.isVisible = true
+            sair.isVisible = false
+            trocarSenha.isVisible = false
+            view3.isVisible = false
+            view4.isVisible = false
+        }
 
         entrar.setOnClickListener(this)
         cadastrar.setOnClickListener(this)
@@ -42,9 +69,11 @@ class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener 
         when (p0?.id) {
             R.id.tv_sign_in -> {
                 startSign()
+                dismiss()
             }
             R.id.tv_sign_up -> {
                 startActivity(Intent(requireActivity(), CreateNewUserActivity::class.java))
+                dismiss()
             }
             R.id.tv_change_password -> {
                 val bottomSheetDialogFragment = RescuePasswordFragment()
@@ -56,24 +85,21 @@ class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener 
         }
     }
 
-    private fun visibilityButtons() {
+    private fun signOut() {
         val sharedPreferences =
             requireActivity().getSharedPreferences(
                 SignUserActivity.WITHOUT_REGISTRATION,
                 Context.MODE_PRIVATE
             )
 
-        if (sharedPreferences?.getBoolean("semcadastro", false) == true){
-
-        }
-    }
-
-    private fun signOut() {
         FirebaseAuth.getInstance().signOut().also {
-            val i = Intent(requireActivity(), SignUserActivity::class.java)
+            val i = Intent(requireActivity(),ProductsActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             requireActivity().startActivity(i)
             requireActivity().finish()
+
+            sharedPreferences.edit().clear().apply()
+            dismiss()
         }
     }
 

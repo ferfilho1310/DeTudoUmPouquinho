@@ -56,6 +56,7 @@ class ProductDetails : AppCompatActivity() {
             title_product.text = it.nameProduct
             value_product.text = "R$ ".plus(it.value)
             description_product_details.text = it.description
+            lojista.text = it.seller
             product = it
         }
 
@@ -66,7 +67,7 @@ class ProductDetails : AppCompatActivity() {
         bt_fazer_pedido.setOnClickListener {
             val sharedPreferences = getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
             val bundle = Bundle()
-            if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
+            if (sharedPreferences?.getBoolean("semcadastro", false) != true) {
                 val i = Intent(this, CreateNewUserActivity::class.java)
                 startActivity(i)
             } else {
