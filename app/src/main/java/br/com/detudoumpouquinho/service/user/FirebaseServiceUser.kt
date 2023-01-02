@@ -6,6 +6,9 @@ import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.view.ProductsActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class FirebaseServiceUser : FirebaseServiceUserContract {
 
@@ -51,17 +54,22 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
             }
     }
 
-    override fun searchIdUser(userId: String) {
-        firestoreInstance
-            .collection("User")
-            .document(userId)
-            .get()
-            .addOnSuccessListener {
-                userListener.value = it.toObject(User::class.java)
-            }.addOnFailureListener {
-                val user: User? = null
-                userListener.value = user
+    override fun searchIdUser(userId: String): Flow<User?> {
+        return callbackFlow {
+            val listener = firestoreInstance
+                .collection("User")
+                .document(userId)
+                .get()
+                .addOnSuccessListener {
+                    trySend(it.toObject(User::class.java)).isSuccess
+                }.addOnFailureListener {
+                    val user: User? = null
+                    trySend(user).isFailure
+                }
+            awaitClose {
+                listener.isComplete
             }
+        }
     }
 
     override fun rescuePassWord(email: String) {
@@ -75,8 +83,6 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
     override fun resultCreateUser() = createUserListener
 
     override fun resultSignUser() = signUserListener
-
-    override fun searchIdUserListener() = userListener
 
     override fun rescuePassWordListener() = rescuePasswordListener
 }

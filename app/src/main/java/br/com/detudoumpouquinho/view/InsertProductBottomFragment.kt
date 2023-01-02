@@ -10,65 +10,73 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.productsUtils.Utils
+import br.com.detudoumpouquinho.databinding.InsertProductFragmentBinding
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.activity_insert_product.*
 import org.koin.android.ext.android.inject
 
 
-class InsertProductBottomFragment : BottomSheetDialogFragment() {
+class InsertProductBottomFragment : BottomSheetDialogFragment(), View.OnClickListener {
 
     private val CAMERA_REQUEST = 1888
 
     val viewModel: ProductsViewModel by inject()
-    val adapter: FotosAdapter = FotosAdapter()
+    val productsAdapter: FotosAdapter = FotosAdapter()
     val photos: ArrayList<String> = arrayListOf()
+
+    private var _binding: InsertProductFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = InsertProductFragmentBinding.inflate(inflater)
+        binding.productsValue.setRawInputType(Configuration.KEYBOARD_12KEY)
 
-        val view = inflater.inflate(R.layout.activity_insert_product, container, true)
+        setObserver()
+        setAdapter()
+        listeners()
 
-        val viewf = view.findViewById<FloatingActionButton>(R.id.fb_products_take_photo)
-        val rc = view.findViewById<RecyclerView>(R.id.rc_products_imagens)
-        val closeButton = view.findViewById<ImageButton>(R.id.close_insert_product)
-        val insertbutton = view.findViewById<Button>(R.id.button)
-        val title = view.findViewById<TextInputEditText>(R.id.products_title)
-        val value = view.findViewById<TextInputEditText>(R.id.products_value)
-        val subtitle = view.findViewById<TextInputEditText>(R.id.products_subtitle)
-        val description = view.findViewById<TextInputEditText>(R.id.product_description)
-        val frete = view.findViewById<TextInputEditText>(R.id.product_value_frete)
-        val formaDePagamento = view.findViewById<TextInputEditText>(R.id.product_payment_form)
+        return binding.root
+    }
 
-        value.setRawInputType(Configuration.KEYBOARD_12KEY)
-
-        viewf.setOnClickListener {
-            val cameraIntent = Intent(Intent.ACTION_PICK)
-            cameraIntent.type = "image/*"
-            startActivityForResult(cameraIntent, CAMERA_REQUEST)
+    private fun setAdapter() {
+        binding.rcProductsImagens.apply {
+            adapter = productsAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
         }
+    }
 
-        closeButton.setOnClickListener {
-            dismiss()
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.button -> {
+                validateInformationProduct()
+            }
+            R.id.fb_products_take_photo -> {
+                val cameraIntent = Intent(Intent.ACTION_PICK)
+                cameraIntent.type = "image/*"
+                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+            }
+            R.id.close_insert_product -> {
+                dismiss()
+            }
         }
+    }
 
-        insertbutton.setOnClickListener {
+    private fun validateInformationProduct() {
+        binding.apply {
             when {
                 photos.isNullOrEmpty() -> {
                     Toast.makeText(
@@ -77,42 +85,40 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                title.text.toString().isEmpty() -> {
-                    title.error = "Informe o nome do produto"
+                productsTitle.text.toString().isEmpty() -> {
+                    productsTitle.error = "Informe o nome do produto"
                 }
-                value.text.toString().isEmpty() -> {
-                    value.error = "Informe o valor do produto"
+                productsValue.text.toString().isEmpty() -> {
+                    productsValue.error = "Informe o valor do produto"
                 }
-                description.text.toString().isEmpty() -> {
-                    description.error = "Crie uma descrição do produto"
+                productDescription.text.toString().isEmpty() -> {
+                    productDescription.error = "Crie uma descrição do produto"
                 }
                 else -> {
-                    lottie_insert_product.visibility = View.VISIBLE
-                    insertbutton.visibility = View.GONE
+                    lottieInsertProduct.visibility = View.VISIBLE
+                    button.visibility = View.GONE
                     viewModel.insertProduct(
                         Product(
-                            nameProduct = title.text.toString(),
-                            value = value.text.toString(),
-                            seller = subtitle.text.toString(),
-                            description = description.text.toString(),
+                            nameProduct = productsTitle.text.toString(),
+                            value = productsValue.text.toString(),
+                            seller = productsSubtitle.text.toString(),
+                            description = productDescription.text.toString(),
                             image = photos,
-                            valueFrete = frete.text.toString(),
-                            paymentForm = formaDePagamento.text.toString()
+                            valueFrete = productValueFrete.text.toString(),
+                            paymentForm = productPaymentForm.text.toString()
                         )
                     )
                 }
             }
         }
+    }
 
-        setObserver(insertbutton)
-
-        rc.adapter = adapter
-        val layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        rc.layoutManager = layoutManager
-        rc.setHasFixedSize(true)
-
-        return view
+    private fun listeners() {
+        binding.let {
+            it.button.setOnClickListener(this)
+            it.fbProductsTakePhoto.setOnClickListener(this)
+            it.closeInsertProduct.setOnClickListener(this)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -121,10 +127,17 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     try {
-                        lnl_insert_image.visibility = View.GONE
-                        rc_products_imagens.visibility = View.VISIBLE
+                        binding.apply {
+                            lnlInsertImage.visibility = View.GONE
+                            rcProductsImagens.visibility = View.VISIBLE
+                        }
 
-                        adapter.listFotos(Utils.uriToBitmap(data!!, requireContext().contentResolver).orEmpty())
+                        productsAdapter.listFotos(
+                            Utils.uriToBitmap(
+                                data!!,
+                                requireContext().contentResolver
+                            ).orEmpty()
+                        )
                         context?.let {
                             Utils.uriToBitmap(data, requireContext().contentResolver)
                                 .let { photos.add(it!!) }
@@ -147,11 +160,11 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setObserver(insertbutton: View) {
-        viewModel.insertProductListener().observe(requireActivity()) {
+    private fun setObserver() {
+        viewModel.insertProductLiveData.observe(requireActivity()) {
             if (it == true) {
-                lottie_insert_product.visibility = View.GONE
-                insertbutton.visibility = View.VISIBLE
+                binding.lottieInsertProduct.visibility = View.GONE
+                binding.button.visibility = View.VISIBLE
                 dismiss()
             } else {
                 Toast.makeText(
@@ -159,10 +172,15 @@ class InsertProductBottomFragment : BottomSheetDialogFragment() {
                     "Houve algum problema ao tentar inserir o produto",
                     Toast.LENGTH_SHORT
                 ).show()
-                lottie_insert_product.visibility = View.GONE
-                insertbutton.visibility = View.VISIBLE
+                binding.lottieInsertProduct.visibility = View.GONE
+                binding.button.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

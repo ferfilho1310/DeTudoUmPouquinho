@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -75,5 +76,12 @@ object Utils {
             }.setPositiveButton("Sim") { _, _ ->
                 positiveButton.invoke()
             }.show()
+    }
+
+    fun log(
+        nameError: String,
+        error: Exception
+    ) {
+        Log.e("Error", nameError.plus(error))
     }
 }

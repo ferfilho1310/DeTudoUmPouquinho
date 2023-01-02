@@ -87,7 +87,8 @@
                 android:src="@drawable/ic_camera"
                 app:layout_constraintBottom_toTopOf="@+id/guideline6"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline6"
@@ -129,7 +130,8 @@
                             android:id="@+id/products_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textAutoComplete" />
+                            android:inputType="textAutoComplete"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,7 +156,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:digits="0123456789,"
-                            android:inputType="numberDecimal" />
+                            android:inputType="numberDecimal"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -163,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Vendedor"
+                    android:hint="Subtitulo"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="660dp">
 
@@ -171,7 +174,8 @@
                         android:id="@+id/products_subtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textAutoComplete" />
+                        android:inputType="textAutoComplete"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -187,7 +191,8 @@
                         android:id="@+id/product_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textMultiLine" />
+                        android:inputType="textMultiLine"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -201,7 +206,8 @@
                         android:id="@+id/product_payment_form"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -215,7 +221,8 @@
                         android:id="@+id/product_value_frete"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -233,7 +240,8 @@
         android:background="@android:color/white"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/button"

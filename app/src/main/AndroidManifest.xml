@@ -22,7 +22,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".view.ProductDetails"
+            android:name=".view.ProductDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.ProductUpdate"
+            android:name=".view.ProductUpdateActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

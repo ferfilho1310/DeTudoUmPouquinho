@@ -2,7 +2,6 @@ package br.com.detudoumpouquinho.view
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +13,10 @@ import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.product_details.*
-import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ProductDetails : AppCompatActivity() {
+class ProductDetailsActivity : AppCompatActivity() {
 
     val viewModelProducts: ProductsViewModel by viewModel()
     private var position = ""
@@ -45,18 +43,18 @@ class ProductDetails : AppCompatActivity() {
         lottie_product_details.visibility = View.VISIBLE
         viewPager.visibility = View.GONE
 
-        viewModelProducts.buscarProdutosIdListener().observe(this) {
+        viewModelProducts.searchProductIdLiveData.observe(this) {
             lottie_product_details.visibility = View.GONE
             viewPager.visibility = View.VISIBLE
-            it.image?.forEach { image ->
+            it?.image?.forEach { image ->
                 Utils.stringToBitMap(image).also { imageBitmap ->
                     imageBitmap?.let { it1 -> imageAdapter.setItems(it1) }
                 }
             }
-            title_product.text = it.nameProduct
-            value_product.text = "R$ ".plus(it.value)
-            description_product_details.text = it.description
-            lojista.text = it.seller
+            title_product.text = it?.nameProduct
+            value_product.text = "R$ ".plus(it?.value)
+            description_product_details.text = it?.description
+            lojista.text = it?.seller
             product = it
         }
 

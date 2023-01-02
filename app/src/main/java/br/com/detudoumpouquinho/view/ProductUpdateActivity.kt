@@ -15,7 +15,7 @@ import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import kotlinx.android.synthetic.main.product_update_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProductUpdate : AppCompatActivity(), View.OnClickListener {
+class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
     private val adapter by lazy { FotosAdapter() }
     private val productsViewModel: ProductsViewModel by viewModel()
@@ -31,12 +31,18 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
 
         val bundle = intent.extras
         position = bundle?.getString("position").toString()
+
         productsViewModel.buscarProdutosId(position)
 
         listeners()
         setObserver()
 
-        productsViewModel.buscarProdutosIdListener().observe(this) { product ->
+        setViewModel()
+        setAdapter()
+    }
+
+    private fun setViewModel() {
+        productsViewModel.searchProductIdLiveData.observe(this) { product ->
             product?.let {
                 it.image?.forEach { image ->
                     adapter.listFotos(image)
@@ -50,7 +56,9 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                 product_value_frete_update.setText(it.valueFrete)
             }
         }
+    }
 
+    private fun setAdapter() {
         rc_products_imagens_update.adapter = adapter
         val layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -77,6 +85,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
                     else -> {
                         lottie_update_product.visibility = View.VISIBLE
                         bt_update_procut.visibility = View.GONE
+
                         val produto = Product(
                             nameProduct = title_updated.text.toString(),
                             seller = subtitle_updated.text.toString(),
@@ -134,7 +143,7 @@ class ProductUpdate : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setObserver() {
-        productsViewModel.updateProductListener().observe(this) {
+        productsViewModel.updateProductLiveData.observe(this) {
             if (it == true) {
                 lottie_update_product.visibility = View.GONE
                 bt_update_procut.visibility = View.VISIBLE
