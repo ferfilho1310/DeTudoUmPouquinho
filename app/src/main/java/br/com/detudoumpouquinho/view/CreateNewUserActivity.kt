@@ -43,7 +43,7 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setObservers() {
-        userViewModel.createUserListener().observe(this) {
+        userViewModel.createUser.observe(this) {
             if (it == true) {
                 lottie_create_user.visibility = View.GONE
                 create_user_button.visibility = View.VISIBLE

@@ -38,6 +38,9 @@ class ProductsViewModel(
     private var _updateProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var updateProductLiveData: LiveData<Boolean> = _updateProductLiveData
 
+    private var _isClientRegister: MutableLiveData<Boolean> = MutableLiveData()
+    var isClientRegister: LiveData<Boolean> = _isClientRegister
+
     override fun insertProduct(product: Product) {
         firebaseServiceProducts.insertNewProduct(product)
             .onEach {
@@ -91,5 +94,9 @@ class ProductsViewModel(
             }.catch {
                 Utils.log("Erro ao buscar o produto por ID ", Exception(it))
             }.launchIn(viewModelScope)
+    }
+
+    override fun doRequest(isClientRegister: Boolean?) {
+        _isClientRegister.value = isClientRegister
     }
 }

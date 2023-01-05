@@ -16,8 +16,6 @@ import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.onboarding.adapter.OnboardingItemsAdapter
 import br.com.detudoumpouquinho.onboarding.model.OnboardingItem
 import br.com.detudoumpouquinho.view.ProductsActivity
-import br.com.detudoumpouquinho.view.SendRequestProduct
-import br.com.detudoumpouquinho.view.SignUserActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
 
 class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
@@ -33,7 +31,7 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
         window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
-        sharedPreferences = getSharedPreferences(SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SKIPPED.SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
 
         setOnboardingItems()
         setupIndicators()
@@ -134,7 +132,7 @@ class OnboardingActivity : AppCompatActivity(), View.OnClickListener {
         result.apply()
     }
 
-    companion object {
-        val SKIPPED_ONBOARDING = "SKIPPED"
+    object SKIPPED {
+        const val SKIPPED_ONBOARDING = "SKIPPED"
     }
 }

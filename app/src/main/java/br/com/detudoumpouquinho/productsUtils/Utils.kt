@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -82,6 +83,6 @@ object Utils {
         nameError: String,
         error: Exception
     ) {
-        Log.e("Error", nameError.plus(error))
+        FirebaseCrashlytics.getInstance().log(nameError.plus(error))
     }
 }

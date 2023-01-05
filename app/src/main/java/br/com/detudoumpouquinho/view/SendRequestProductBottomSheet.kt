@@ -1,0 +1,203 @@
+package br.com.detudoumpouquinho.view
+
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.databinding.SendRequestProductFragmentBinding
+import br.com.detudoumpouquinho.productsUtils.Utils
+import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.viewModel.remoteConfig.RemoteConfigViewModel
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickListener {
+
+    private var product = Product()
+    private val remoteConfig: RemoteConfigViewModel by viewModel()
+    private var celular = ""
+    private var sharedPreferences: SharedPreferences? = null
+    private var extras: Product? = null
+
+    private var _binding: SendRequestProductFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = SendRequestProductFragmentBinding.inflate(inflater)
+
+        sharedPreferences = requireActivity().getSharedPreferences(ENDERECO, Context.MODE_PRIVATE)
+        extras = arguments?.getParcelable("product")
+
+        product = extras!!
+
+        fillFieldsWithDataSharedPreferences()
+        imageOfProduct()
+        fetchCelPhoneRemoteConfig()
+        fillSharedPreferencesWithDataClient()
+        listener()
+
+        return binding.root
+    }
+
+    private fun fillFieldsWithDataSharedPreferences() {
+        sharedPreferences?.apply {
+            binding.run {
+                edStreet.setText(getString("rua", ""))
+                edNumber.setText(getString("numero", ""))
+                edBairro.setText(getString("bairro", ""))
+                edCidade.setText(getString("cidade", ""))
+                edEstado.setText(getString("estado", ""))
+                edCep.setText(getString("cep", ""))
+            }
+        }
+    }
+
+    private fun imageOfProduct() {
+        extras?.apply {
+            Glide.with(requireActivity()).load(Utils.stringToBitMap(image?.get(0)))
+                .into(binding.imgPreviewRequestProduct)
+            binding.tvNameProduct.text = nameProduct.orEmpty()
+            binding.tvValueProduct.text = "R$ ".plus(value)
+        }
+    }
+
+    private fun fetchCelPhoneRemoteConfig() {
+        remoteConfig.celularLiveData.observe(requireActivity()) {
+            celular = it
+        }
+    }
+
+    private fun fillSharedPreferencesWithDataClient() {
+        val fillDataClient = sharedPreferences?.edit()
+
+        fillDataClient?.apply {
+            binding.run {
+                putString("rua", edStreet.text.toString())
+                putString("numero", edNumber.text.toString())
+                putString("bairro", edBairro.text.toString())
+                putString("cidade", edCidade.text.toString())
+                putString("estado", edEstado.text.toString())
+                putString("cep", edCep.text.toString())
+            }
+        }.also {
+            it?.apply()
+        }
+    }
+
+    private fun messageSendWhatsApp() {
+        val text = StringBuilder()
+        val textNoSalve = StringBuilder()
+
+        val endereco = if (sharedPreferences != null) {
+            templateRequest(sharedPreferences, text)
+        } else {
+            textNoSalve.apply {
+                binding.run {
+                    append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
+                    append("no valor de ${product.value}.\n\n")
+                    append("O endereço para envio é:\n Rua: ${edStreet.text.toString()}\n")
+                    append("Número: ${edNumber.text.toString()}\n")
+                    append("Bairro: ${edBairro.text.toString()}\n")
+                    append("Cidade: ${edCidade.text.toString()}\n")
+                    append("Estado: ${edEstado.text.toString()}\n")
+                    append("CEP: ${edCep.text.toString()}\n")
+                }
+            }
+        }
+        sendMessageWhatsApp(endereco, celular)
+    }
+
+    private fun listener() {
+        binding.btFinishRequest.setOnClickListener(this)
+        binding.closeSendRequestProduct.setOnClickListener(this)
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.close_send_request_product -> {
+                dismiss()
+            }
+            R.id.bt_finish_request -> {
+                messageSendWhatsApp()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        remoteConfig.fetchCelular(requireContext())
+    }
+
+    private fun sendMessageWhatsApp(endereco: StringBuilder, contact: String) {
+
+        val url = "https://api.whatsapp.com/send?phone=$contact&text=${endereco}"
+
+        try {
+            val pm = requireActivity().packageManager
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES)
+            startWhatsApp(url)
+        } catch (e: PackageManager.NameNotFoundException) {
+            startWhatsApp(url)
+        }
+    }
+
+    private fun templateRequest(
+        sharedPreferences: SharedPreferences?,
+        text: StringBuilder
+    ): StringBuilder {
+        return text.apply {
+            text.append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
+            text.append("no valor de R$ ${product.value}.\n\n")
+            text.append(
+                "O endereço para envio é:\n Rua: ${
+                    sharedPreferences?.getString(
+                        "rua",
+                        ""
+                    )
+                }\n"
+            )
+            text.append("Número: ${sharedPreferences?.getString("numero", "")}\n")
+            text.append("Cidade: ${sharedPreferences?.getString("cidade", "")}\n")
+            text.append("Estado: ${sharedPreferences?.getString("estado", "")}\n")
+            text.append("CEP: ${sharedPreferences?.getString("cep", "")}\n")
+        }
+    }
+
+    private fun startWhatsApp(url: String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setOnShowListener { dialogInterface ->
+            val bottomSheetDialog = dialogInterface as BottomSheetDialog
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dialog
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val ENDERECO = "endereço"
+    }
+}

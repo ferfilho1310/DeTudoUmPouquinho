@@ -1,7 +1,6 @@
 package br.com.detudoumpouquinho.service.user
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.view.ProductsActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -15,43 +14,47 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
     private val firestoreInstance = FirebaseFirestore.getInstance()
     private val firestoreCreateUserInstance = FirebaseAuth.getInstance()
 
-    private val createUserListener: MutableLiveData<Boolean> = MutableLiveData()
-    private val signUserListener: MutableLiveData<Boolean> = MutableLiveData()
-    private val userListener: MutableLiveData<User> = MutableLiveData()
-    private val rescuePasswordListener: MutableLiveData<Boolean> = MutableLiveData()
+    override fun insertNewUser(user: User): Flow<Boolean> {
+        return callbackFlow {
+            val listener = firestoreCreateUserInstance
+                .createUserWithEmailAndPassword(user.email.orEmpty(), user.password.orEmpty())
+                .addOnSuccessListener {
+                    val map: MutableMap<String, String?> = HashMap()
+                    map["name"] = user.name
+                    map["email"] = user.email
+                    map["identifier"] = ProductsActivity.USER
 
-    override fun insertNewUser(user: User) {
-        firestoreCreateUserInstance
-            .createUserWithEmailAndPassword(user.email.orEmpty(), user.password.orEmpty())
-            .addOnSuccessListener {
-                val map: MutableMap<String, String?> = HashMap()
-                map["name"] = user.name
-                map["email"] = user.email
-                map["identifier"] = ProductsActivity.USER
-
-                firestoreInstance
-                    .collection("User")
-                    .document(firestoreCreateUserInstance.uid.orEmpty())
-                    .set(map)
-
-                createUserListener.value = true
-            }.addOnFailureListener {
-                Log.e("ERROR", "Algo deu errado $it")
-                createUserListener.value = false
+                    firestoreInstance
+                        .collection("User")
+                        .document(firestoreCreateUserInstance.uid.orEmpty())
+                        .set(map)
+                    trySend(true).isFailure
+                }.addOnFailureListener {
+                    Log.e("ERROR", "Algo deu errado $it")
+                    trySend(false).isFailure
+                }
+            awaitClose {
+                listener.isComplete
             }
+        }
     }
 
-    override fun signUser(user: User) {
-        firestoreCreateUserInstance.signInWithEmailAndPassword(
-            user.email.orEmpty(),
-            user.password.orEmpty()
-        )
-            .addOnSuccessListener {
-                signUserListener.value = true
-            }.addOnFailureListener {
-                Log.e("ERROR", "Algo deu errado $it")
-                signUserListener.value = false
+    override fun signUser(user: User): Flow<Boolean> {
+        return callbackFlow {
+            val listerner = firestoreCreateUserInstance.signInWithEmailAndPassword(
+                user.email.orEmpty(),
+                user.password.orEmpty()
+            )
+                .addOnSuccessListener {
+                    trySend(true).isSuccess
+                }.addOnFailureListener {
+                    Log.e("ERROR", "Algo deu errado $it")
+                    trySend(false).isFailure
+                }
+            awaitClose {
+                listerner.isComplete
             }
+        }
     }
 
     override fun searchIdUser(userId: String): Flow<User?> {
@@ -72,17 +75,19 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
         }
     }
 
-    override fun rescuePassWord(email: String) {
-        firestoreCreateUserInstance
-            .sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                rescuePasswordListener.value = task.isSuccessful
+    override fun rescuePassWord(email: String): Flow<Boolean> {
+        return callbackFlow {
+            val listener = firestoreCreateUserInstance
+                .sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    trySend(task.isSuccessful).isSuccess
+                }.addOnFailureListener {
+                    trySend(false).isFailure
+                }
+            awaitClose {
+                listener.isComplete
             }
+        }
+
     }
-
-    override fun resultCreateUser() = createUserListener
-
-    override fun resultSignUser() = signUserListener
-
-    override fun rescuePassWordListener() = rescuePasswordListener
 }

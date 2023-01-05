@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.databinding.RescuePasswordFragmentBinding
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,45 +21,54 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.rescue_password_fragment.*
 import org.koin.android.ext.android.inject
 
-class RescuePasswordFragment : BottomSheetDialogFragment() {
+class RescuePasswordFragment : BottomSheetDialogFragment(), View.OnClickListener {
 
     private val viewModel: UserViewModel by inject()
+
+    private var _binding: RescuePasswordFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = RescuePasswordFragmentBinding.inflate(layoutInflater)
 
-        val view = inflater.inflate(R.layout.rescue_password_fragment, container, false)
+        listeners()
+        setViewModel()
+        return binding.root
+    }
 
-        val edEmail = view.findViewById<TextInputEditText>(R.id.rescue_email)
-        val btRescuePassWord = view.findViewById<Button>(R.id.bt_rescue_password)
-        val closeRescue = view.findViewById<ImageButton>(R.id.img_close_rescue_password)
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.bt_rescue_password -> {
+                if (binding.rescueEmail.text.toString().isEmpty()) {
+                    binding.rescueEmail.error = "Informe um e-mail"
+                } else {
+                    binding.btRescuePassword.visibility = View.GONE
+                    binding.lottieRescuePassword.visibility = View.VISIBLE
 
-        btRescuePassWord.setOnClickListener {
-            if (edEmail.text.toString().isEmpty()) {
-                edEmail.error = "Informe um e-mail"
-            } else {
-                btRescuePassWord.visibility = View.GONE
-                lottieRescuePassword.visibility = View.VISIBLE
-
-                viewModel.rescuePassWord(edEmail.text.toString())
+                    viewModel.rescuePassWord(binding.rescueEmail.text.toString())
+                }
             }
+            R.id.img_close_rescue_password -> dismiss()
         }
+    }
+    private fun listeners() {
+        binding.btRescuePassword.setOnClickListener(this)
+        binding.imgCloseRescuePassword.setOnClickListener(this)
+    }
 
-        closeRescue.setOnClickListener {
-            dismiss()
-        }
-
-        viewModel.rescuePassWordListener().observe(this) {
+    private fun setViewModel() {
+        viewModel.rescuePasswordUser.observe(this) {
             if (it == true) {
                 dismiss()
 
-                 val i = Intent(
-                     requireActivity(),
-                        SignUserActivity::class.java
-                    )
+                val i = Intent(
+                    requireActivity(),
+                    SignUserActivity::class.java
+                )
                 requireActivity().startActivity(i)
                 requireActivity().finish()
 
@@ -70,26 +80,28 @@ class RescuePasswordFragment : BottomSheetDialogFragment() {
 
                 FirebaseAuth.getInstance().signOut().also {
                     sharedPreferences.edit().clear().apply()
-
                 }
 
-                btRescuePassWord.visibility = View.VISIBLE
+                binding.btRescuePassword.visibility = View.VISIBLE
                 lottieRescuePassword.visibility = View.GONE
 
                 Toast.makeText(
                     context,
-                    "Foi enviado um e-mail de reset da senha para o e-mail informado",
+                    "Foi enviado um e-mail de recuperação para o seu e-mail cadastrado",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                btRescuePassWord.visibility = View.VISIBLE
+                binding.btRescuePassword.visibility = View.VISIBLE
                 lottieRescuePassword.visibility = View.GONE
                 Toast.makeText(context, "Verifique o e-mail digitado", Toast.LENGTH_SHORT)
                     .show()
             }
         }
+    }
 
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

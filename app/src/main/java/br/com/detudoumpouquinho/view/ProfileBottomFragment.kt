@@ -3,13 +3,14 @@ package br.com.detudoumpouquinho.view
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.databinding.ProfileFragmentBinding
 import br.com.detudoumpouquinho.productsUtils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,51 +19,79 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener {
 
+    private var _binding: ProfileFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    private var sharedPreferences: SharedPreferences? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = ProfileFragmentBinding.inflate(layoutInflater)
 
-        val view = inflater.inflate(R.layout.profile_fragment, container, false)
+        listeners()
+        showRegisterOrSignIn()
+        return binding.root
+    }
 
-        val entrar = view.findViewById<TextView>(R.id.tv_sign_in)
-        val cadastrar = view.findViewById<TextView>(R.id.tv_sign_up)
-        val trocarSenha = view.findViewById<TextView>(R.id.tv_change_password)
-        val sair = view.findViewById<TextView>(R.id.tv_sign_out)
-        val view1 = view.findViewById<View>(R.id.view1)
-        val view2 = view.findViewById<View>(R.id.view2)
-        val view3 = view.findViewById<View>(R.id.view3)
-        val view4 = view.findViewById<View>(R.id.view4)
-
-        val sharedPreferences =
+    private fun showRegisterOrSignIn() {
+        sharedPreferences =
             requireActivity().getSharedPreferences(
                 SignUserActivity.WITHOUT_REGISTRATION,
                 Context.MODE_PRIVATE
             )
 
         if (sharedPreferences?.getBoolean("semcadastro", false) == true) {
-            entrar.isVisible = false
-            cadastrar.isVisible = false
-            sair.isVisible = true
-            trocarSenha.isVisible = true
-            view1.isVisible = false
-            view2.isVisible = false
+            visibilityViews(
+                tvSignVisibility = false,
+                tvSignUpVisibility = false,
+                tvChangePasswordVisibility = true,
+                tvSignOutVisibility = true,
+                view1Visibility = false,
+                view2Visibility = false
+            )
         } else {
-            entrar.isVisible = true
-            cadastrar.isVisible = true
-            sair.isVisible = false
-            trocarSenha.isVisible = false
-            view3.isVisible = false
-            view4.isVisible = false
+            visibilityViews(
+                tvSignVisibility = true,
+                tvSignUpVisibility = true,
+                tvChangePasswordVisibility = false,
+                tvSignOutVisibility = false,
+                view3Visibility = false,
+                view4Visibility = false
+            )
         }
+    }
 
-        entrar.setOnClickListener(this)
-        cadastrar.setOnClickListener(this)
-        trocarSenha.setOnClickListener(this)
-        sair.setOnClickListener(this)
+    private fun visibilityViews(
+        tvSignVisibility: Boolean,
+        tvSignUpVisibility: Boolean,
+        tvChangePasswordVisibility: Boolean,
+        tvSignOutVisibility: Boolean,
+        view1Visibility: Boolean = true,
+        view2Visibility: Boolean = true,
+        view3Visibility: Boolean = true,
+        view4Visibility: Boolean = true
+    ) {
+        binding.apply {
+            tvSignIn.isVisible = tvSignVisibility
+            tvSignUp.isVisible = tvSignUpVisibility
+            tvSignOut.isVisible = tvSignOutVisibility
+            tvChangePassword.isVisible = tvChangePasswordVisibility
+            view1.isVisible = view1Visibility
+            view2.isVisible = view2Visibility
+            view3.isVisible = view3Visibility
+            view4.isVisible = view4Visibility
+        }
+    }
 
-        return view
+
+    private fun listeners() {
+        binding.tvSignIn.setOnClickListener(this)
+        binding.tvSignUp.setOnClickListener(this)
+        binding.tvChangePassword.setOnClickListener(this)
+        binding.tvSignOut.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -93,7 +122,7 @@ class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener 
             )
 
         FirebaseAuth.getInstance().signOut().also {
-            val i = Intent(requireActivity(),ProductsActivity::class.java)
+            val i = Intent(requireActivity(), ProductsActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             requireActivity().startActivity(i)
             requireActivity().finish()
@@ -106,6 +135,11 @@ class ProfileBottomFragment : BottomSheetDialogFragment(), View.OnClickListener 
     private fun startSign() {
         val i = Intent(requireActivity(), SignUserActivity::class.java)
         requireActivity().startActivity(i)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

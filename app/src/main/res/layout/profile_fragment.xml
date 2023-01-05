@@ -2,12 +2,30 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:padding="8dp"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Perfil"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="58dp"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_marginStart="8dp"
+            />
 
         <TextView
             android:id="@+id/tv_sign_in"
@@ -16,7 +34,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Entrar"
-            android:textSize="20dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -39,7 +57,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Cadastrar"
-            android:textSize="20dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -62,7 +80,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Trocar senha"
-            android:textSize="20dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_and_sign_up" />
@@ -86,7 +104,7 @@
             android:layout_marginTop="8dp"
             android:text="Sair"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="20dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_and_sign_up" />

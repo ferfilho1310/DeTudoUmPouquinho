@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.databinding.ProductUpdateActivityBinding
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
@@ -23,9 +24,12 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
     private val photos: ArrayList<String> = arrayListOf()
     private val CAMERA_REQUEST = 1888
 
+    private lateinit var binding: ProductUpdateActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.product_update_activity)
+        binding = ProductUpdateActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
 
@@ -36,7 +40,6 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
         listeners()
         setObserver()
-
         setViewModel()
         setAdapter()
     }
@@ -48,22 +51,24 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
                     adapter.listFotos(image)
                     photos.add(image)
                 }
-                title_updated.setText(it.nameProduct)
-                subtitle_updated.setText(it.seller)
-                description_update.setText(it.description)
-                value_update.setText(it.value)
-                product_payment_form_update.setText(it.paymentForm)
-                product_value_frete_update.setText(it.valueFrete)
+                binding.apply {
+                    titleUpdated.setText(it.nameProduct)
+                    subtitleUpdated.setText(it.seller)
+                    descriptionUpdate.setText(it.description)
+                    valueUpdate.setText(it.value)
+                    productValueFreteUpdate.setText(it.valueFrete)
+                    productPaymentFormUpdate.setText(it.paymentForm)
+                }
             }
         }
     }
 
     private fun setAdapter() {
-        rc_products_imagens_update.adapter = adapter
+        binding.rcProductsImagensUpdate.adapter = adapter
         val layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rc_products_imagens_update.layoutManager = layoutManager
-        rc_products_imagens_update.setHasFixedSize(true)
+        binding.rcProductsImagensUpdate.layoutManager = layoutManager
+        binding.rcProductsImagensUpdate.setHasFixedSize(true)
     }
 
     override fun onClick(p0: View?) {

@@ -2,7 +2,7 @@ package br.com.detudoumpouquinho.di
 
 import br.com.detudoumpouquinho.service.product.FirebaseServiceProducts
 import br.com.detudoumpouquinho.service.product.FirebaseServiceProductsContract
-import br.com.detudoumpouquinho.service.remoteConfig.RemoteConfig
+import br.com.detudoumpouquinho.service.remoteConfig.RemoteConfigService
 import br.com.detudoumpouquinho.service.remoteConfig.RemoteConfigContract
 import br.com.detudoumpouquinho.service.user.FirebaseServiceUser
 import br.com.detudoumpouquinho.service.user.FirebaseServiceUserContract
@@ -30,6 +30,6 @@ object KoinModules {
     val service = module {
         factory<FirebaseServiceUserContract> { FirebaseServiceUser() }
         factory<FirebaseServiceProductsContract> { FirebaseServiceProducts() }
-        factory<RemoteConfigContract> { RemoteConfig() }
+        factory<RemoteConfigContract> { RemoteConfigService() }
     }
 }

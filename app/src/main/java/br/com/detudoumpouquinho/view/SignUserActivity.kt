@@ -48,7 +48,7 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setObservers() {
-        userViewModel.signUserListener().observe(this) {
+        userViewModel.signUser.observe(this) {
             if (it == true) {
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
@@ -69,7 +69,6 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 ).show()
                 lottie.visibility = View.GONE
                 bt_sign_user.visibility = View.VISIBLE
-
             }
         }
     }

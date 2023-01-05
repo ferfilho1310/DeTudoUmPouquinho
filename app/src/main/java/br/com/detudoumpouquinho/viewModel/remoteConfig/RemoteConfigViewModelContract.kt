@@ -5,5 +5,4 @@ import androidx.lifecycle.MutableLiveData
 
 interface RemoteConfigViewModelContract {
     fun fetchCelular(context: Context?)
-    fun fetchCelularListener(): MutableLiveData<String>
 }

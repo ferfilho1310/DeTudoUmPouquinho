@@ -25,7 +25,7 @@ class SplashscreenActivity : AppCompatActivity() {
         window.navigationBarColor = resources.getColor(R.color.light_blue)
 
         sharedPreferences =
-            getSharedPreferences(OnboardingActivity.SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
+            getSharedPreferences(OnboardingActivity.SKIPPED.SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
 
         result = sharedPreferences.getBoolean("skipped", false)
 

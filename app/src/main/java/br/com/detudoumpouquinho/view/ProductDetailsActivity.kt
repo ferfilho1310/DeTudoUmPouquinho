@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.databinding.ProductDetailsBinding
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.view.adapter.ImageAdapter
@@ -16,62 +17,93 @@ import kotlinx.android.synthetic.main.product_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ProductDetailsActivity : AppCompatActivity() {
+class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
-    val viewModelProducts: ProductsViewModel by viewModel()
+    private val viewModelProducts: ProductsViewModel by viewModel()
     private var position = ""
-    var product: Product? = null
+    private var product: Product? = null
+    private lateinit var binding: ProductDetailsBinding
+    private var imageAdapter: ImageAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.product_details)
+        binding = ProductDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         window.navigationBarColor = resources.getColor(R.color.dark_blue)
         supportActionBar?.hide()
 
         MobileAds.initialize(this)
-        loadAds()
 
         val bundle = intent.extras
         position = bundle?.getString("position").toString()
         viewModelProducts.buscarProdutosId(position)
 
-        val imageAdapter = ImageAdapter(this)
-        viewPager.adapter = imageAdapter
-        tablayout_image.setupWithViewPager(viewPager, true)
+        loadAds()
+        setImageAdapter()
+        setViewModel()
+        listeners()
+    }
 
-        lottie_product_details.visibility = View.VISIBLE
-        viewPager.visibility = View.GONE
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.img_close_product_detail -> {
+                finish()
+            }
+            R.id.bt_fazer_pedido -> {
+                val sharedPreferences =
+                    getSharedPreferences(
+                        SignUserActivity.WITHOUT_REGISTRATION,
+                        Context.MODE_PRIVATE
+                    )
+                viewModelProducts.doRequest(sharedPreferences?.getBoolean("semcadastro", false))
+            }
+        }
+    }
+
+    private fun setImageAdapter() {
+        imageAdapter = ImageAdapter(this)
+        binding.viewPager.adapter = imageAdapter
+        binding.tablayoutImage.setupWithViewPager(viewPager, true)
+    }
+
+    private fun listeners() {
+        binding.imgCloseProductDetail.setOnClickListener(this)
+        binding.btFazerPedido.setOnClickListener(this)
+    }
+
+    private fun setViewModel() {
+        binding.lottieProductDetails.visibility = View.VISIBLE
+        binding.viewPager.visibility = View.GONE
 
         viewModelProducts.searchProductIdLiveData.observe(this) {
-            lottie_product_details.visibility = View.GONE
-            viewPager.visibility = View.VISIBLE
+
+            binding.lottieProductDetails.visibility = View.GONE
+            binding.viewPager.visibility = View.VISIBLE
+
             it?.image?.forEach { image ->
                 Utils.stringToBitMap(image).also { imageBitmap ->
-                    imageBitmap?.let { it1 -> imageAdapter.setItems(it1) }
+                    imageBitmap?.let { it1 -> imageAdapter?.setItems(it1) }
                 }
             }
-            title_product.text = it?.nameProduct
-            value_product.text = "R$ ".plus(it?.value)
-            description_product_details.text = it?.description
-            lojista.text = it?.seller
+            binding.apply {
+                titleProduct.text = it?.nameProduct
+                valueProduct.text = "R$ ".plus(it?.value)
+                descriptionProductDetails.text = it?.description
+                lojista.text = it?.seller
+            }
             product = it
         }
 
-        img_close_product_detail.setOnClickListener {
-            finish()
-        }
-
-        bt_fazer_pedido.setOnClickListener {
-            val sharedPreferences = getSharedPreferences(SignUserActivity.WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+        viewModelProducts.isClientRegister.observe(this) {
             val bundle = Bundle()
-            if (sharedPreferences?.getBoolean("semcadastro", false) != true) {
+            if (it != true) {
                 val i = Intent(this, CreateNewUserActivity::class.java)
                 startActivity(i)
             } else {
                 bundle.putParcelable("product", product)
 
-                val bottomSheetDialogFragment = SendRequestProduct()
+                val bottomSheetDialogFragment = SendRequestProductBottomSheet()
                 bottomSheetDialogFragment.arguments = bundle
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
@@ -83,6 +115,6 @@ class ProductDetailsActivity : AppCompatActivity() {
             .Builder()
             .build()
 
-        adview_product_details.loadAd(adRequest)
+        binding.adviewProductDetails.loadAd(adRequest)
     }
 }

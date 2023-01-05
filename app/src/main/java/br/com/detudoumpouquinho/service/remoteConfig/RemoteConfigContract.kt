@@ -2,8 +2,8 @@ package br.com.detudoumpouquinho.service.remoteConfig
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.Flow
 
 interface RemoteConfigContract {
-    fun fetchCelular(context: Context?)
-    fun fetchCelularListener(): MutableLiveData<String>
+    fun remoteConfigFetch(context: Context?): Flow<String>
 }
