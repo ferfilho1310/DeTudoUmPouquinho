@@ -15,6 +15,7 @@ import br.com.detudoumpouquinho.view.ProductsActivity
 import br.com.detudoumpouquinho.view.ProductsActivity.Companion.USER
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.ViewHolder(view) {
 
@@ -27,16 +28,20 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
 
     fun imageProduct(product: Product) {
         product.apply {
-            Glide.with(context).load(Utils.stringToBitMap(image?.get(0))).into(imgProduct)
+            Glide.with(context)
+                .load(Utils.stringToBitMap(image?.get(0)))
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .centerCrop()
+                .into(imgProduct)
             valueProduct.text = "R$ ".plus(value)
             title.text = nameProduct
             paymentFormView.text = paymentForm
         }
     }
 
-    fun deleteAndUpdateIsVisible(userViewModel: UserViewModel) {
-        userViewModel.searchIdUser.observe(context as LifecycleOwner) {
-            if(it.identifier != USER){
+    fun deleteAndUpdateIsVisible(userViewModel: UserViewModel?) {
+        userViewModel?.searchIdUser?.observe(context as LifecycleOwner) {
+            if (it.identifier != USER) {
                 delete.isVisible = true
                 update.isVisible = true
             }

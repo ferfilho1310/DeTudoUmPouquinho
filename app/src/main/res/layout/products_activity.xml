@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -35,8 +34,8 @@
             android:id="@+id/tv_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Perfil"
             android:layout_marginTop="-4dp"
+            android:text="Perfil"
             android:textColor="@color/white"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/img_profile"
@@ -68,41 +67,49 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_products"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sw_products"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:nestedScrollingEnabled="true"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toTopOf="@+id/adview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lnl_search"
-        app:spanCount="2"
-        tools:listitem="@layout/products_item_view_holder" />
+        app:layout_constraintTop_toBottomOf="@+id/lnl_search">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_products"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:nestedScrollingEnabled="true"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toTopOf="@+id/adview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lnl_search"
+            app:spanCount="2" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="ca-app-pub-2528240545678093/8749498575"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-2528240545678093/8749498575"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/insert_new_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         android:backgroundTint="@color/dark_blue"
         android:src="@drawable/ic_add"
         android:visibility="gone"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/rc_products"
+        app:layout_constraintBottom_toBottomOf="@+id/sw_products"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

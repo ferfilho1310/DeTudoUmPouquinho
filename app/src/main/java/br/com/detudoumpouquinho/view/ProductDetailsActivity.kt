@@ -48,6 +48,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.img_close_product_detail -> {
+                val iProductsActivity = Intent(this,ProductsActivity::class.java)
+                startActivity(iProductsActivity)
                 finish()
             }
             R.id.bt_fazer_pedido -> {

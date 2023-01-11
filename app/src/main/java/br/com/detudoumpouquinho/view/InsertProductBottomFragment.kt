@@ -17,6 +17,7 @@ import br.com.detudoumpouquinho.databinding.InsertProductFragmentBinding
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.view.adapter.FotosAdapter
+import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,7 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
 
 
-class InsertProductBottomFragment : BottomSheetDialogFragment(), View.OnClickListener {
+class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialogFragment(), View.OnClickListener {
 
     private val CAMERA_REQUEST = 1888
 
@@ -165,6 +166,8 @@ class InsertProductBottomFragment : BottomSheetDialogFragment(), View.OnClickLis
             if (it == true) {
                 binding.lottieInsertProduct.visibility = View.GONE
                 binding.button.visibility = View.VISIBLE
+                val iProductsActivity = Intent(requireContext(),ProductsActivity::class.java)
+                startActivity(iProductsActivity)
                 dismiss()
             } else {
                 Toast.makeText(
@@ -190,5 +193,9 @@ class InsertProductBottomFragment : BottomSheetDialogFragment(), View.OnClickLis
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         return dialog
+    }
+
+    fun newInstance(adapter: ProdutosAdapter): InsertProductBottomFragment {
+        return InsertProductBottomFragment(adapter)
     }
 }

@@ -1,5 +1,6 @@
 package br.com.detudoumpouquinho.service.product
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import br.com.detudoumpouquinho.model.Product
 import com.google.firebase.firestore.DocumentReference
@@ -10,6 +11,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.util.*
+import kotlin.collections.ArrayList
 
 @ExperimentalCoroutinesApi
 class FirebaseServiceProducts : FirebaseServiceProductsContract {
@@ -32,12 +34,15 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
                 map["nameProductUpperCase"] = it.nameProduct?.uppercase()
                 map["valueFrete"] = it.valueFrete
                 map["paymentForm"] = it.paymentForm
+                map["id"] = ""
             }
 
             val listener = firestoreInstance
                 .collection("Products")
                 .add(map)
                 .addOnSuccessListener {
+                    updateUniqueProduct(it.id)
+                    Log.i("PRODUCT_ID", "Id do produto salvo ${it.id}")
                     trySend(true).isSuccess
                 }.addOnFailureListener {
                     trySend(false).isFailure
@@ -49,22 +54,44 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
         }
     }
 
-    override fun loadProducts(): Flow<Query> {
+    private fun updateUniqueProduct(id: String) {
+        val map: MutableMap<String, Any?> = HashMap()
+        map["id"] = id
+        firestoreInstance
+            .collection("Products")
+            .document(id)
+            .update(map)
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    override fun loadProducts(): Flow<ArrayList<Product>> {
         return callbackFlow {
-            val query = firestoreInstance.collection("Products")
-            trySend(query).isSuccess
+            val listener = firestoreInstance
+                .collection("Products")
+                .get()
+                .addOnSuccessListener {
+                val products = it.toObjects(Product::class.java)
+                trySend(products as ArrayList<Product>).isSuccess
+            }.addOnFailureListener {
+                trySend(arrayListOf()).isFailure
+            }
 
             awaitClose {
-
+                listener.isComplete
             }
         }
     }
 
-    override fun deleteProduct(documentId: DocumentReference): Flow<Boolean> {
+    override fun deleteProduct(documentId: String): Flow<Boolean> {
         return callbackFlow {
             val listener = firestoreInstance
                 .collection("Products")
-                .document(documentId.id)
+                .document(documentId)
                 .delete()
                 .addOnSuccessListener {
                     trySend(true).isSuccess
@@ -79,7 +106,7 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
 
     }
 
-    override fun searchProducts(nomeProduto: String): Flow<Query> {
+    /*override fun searchProducts(nomeProduto: String): Flow<Query> {
         return callbackFlow {
             val query =
                 firestoreInstance.collection("Products").orderBy("nameProductUpperCase").startAt(
@@ -89,7 +116,7 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
                 ).endAt(nomeProduto.uppercase(Locale.getDefault()) + "\uf8ff")
             trySend(query).isSuccess
         }
-    }
+    }*/
 
     override fun updateProduct(documentId: String, model: Product): Flow<Boolean> {
         return callbackFlow {

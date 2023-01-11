@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 interface FirebaseServiceProductsContract {
 
     fun insertNewProduct(product: Product): Flow<Boolean>
-    fun loadProducts(): Flow<Query>
-    fun deleteProduct(documentId: DocumentReference): Flow<Boolean>
-    fun searchProducts(nomeProduto: String): Flow<Query>
+    fun loadProducts(): Flow<ArrayList<Product>>
+    fun deleteProduct(documentId: String): Flow<Boolean>
+    //fun searchProducts(nomeProduto: String): Flow<Query>
     fun updateProduct(documentId: String, model: Product): Flow<Boolean>
     fun searchProductId(idProducto: String): Flow<Product?>
 }

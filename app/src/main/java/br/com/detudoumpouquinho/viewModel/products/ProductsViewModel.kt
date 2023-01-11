@@ -9,6 +9,7 @@ import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.service.product.FirebaseServiceProductsContract
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -23,11 +24,14 @@ class ProductsViewModel(
     private var _insertProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var insertProductLiveData: LiveData<Boolean> = _insertProductLiveData
 
-    private var _loadProductLiveData: MutableLiveData<Query> = MutableLiveData()
-    var loadProductLiveData: LiveData<Query> = _loadProductLiveData
+    private var _loadProductLiveData: MutableLiveData<ArrayList<Product>> = MutableLiveData()
+    var loadProductLiveData: LiveData<ArrayList<Product>> = _loadProductLiveData
 
-    private var _searchProductLiveData: MutableLiveData<Query> = MutableLiveData()
-    var searchProductLiveData: LiveData<Query> = _searchProductLiveData
+    private var _updateListProductLiveData: MutableLiveData<ArrayList<Product>> = MutableLiveData()
+    var updateListProductLiveData: LiveData<ArrayList<Product>> = _updateListProductLiveData
+
+    private var _searchProductLiveData: MutableLiveData<List<Product>> = MutableLiveData()
+    var searchProductLiveData: LiveData<List<Product>> = _searchProductLiveData
 
     private var _deleteProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var deleteProductLiveData: LiveData<Boolean> = _deleteProductLiveData
@@ -60,8 +64,8 @@ class ProductsViewModel(
             }.launchIn(viewModelScope)
     }
 
-    override fun deleteProduct(documentId: DocumentReference) {
-        firebaseServiceProducts.deleteProduct(documentId)
+    override fun deleteProduct(documentId: String?) {
+        firebaseServiceProducts.deleteProduct(documentId.orEmpty())
             .onEach {
                 _deleteProductLiveData.value = it
             }.catch {
@@ -69,14 +73,14 @@ class ProductsViewModel(
             }.launchIn(viewModelScope)
     }
 
-    override fun searchProduct(nomeProduct: String) {
+    /*override fun searchProduct(nomeProduct: String) {
         firebaseServiceProducts.searchProducts(nomeProduct)
             .onEach {
                 _loadProductLiveData.value = it
             }.catch {
                 Utils.log("Erro ao buscar os produtos ", Exception(it))
             }.launchIn(viewModelScope)
-    }
+    }*/
 
     override fun updateProduct(position: String, product: Product) {
         firebaseServiceProducts.updateProduct(position, product)
@@ -98,5 +102,14 @@ class ProductsViewModel(
 
     override fun doRequest(isClientRegister: Boolean?) {
         _isClientRegister.value = isClientRegister
+    }
+
+    override fun updateListProducts() {
+        firebaseServiceProducts.loadProducts()
+            .onEach {
+                _updateListProductLiveData.postValue(it)
+            }.catch {
+                Utils.log("Erro ao carregar os produtos", Exception(it))
+            }.launchIn(viewModelScope)
     }
 }

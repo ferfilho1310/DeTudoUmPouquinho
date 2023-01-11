@@ -8,17 +8,34 @@ import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.viewHolder.ProdutosViewHolder
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.DocumentReference
 import kotlinx.android.synthetic.main.products_item_view_holder.view.*
 
-class ProdutosAdapter(
-    options: FirestoreRecyclerOptions<Product>?,
-    val userViewModel: UserViewModel,
-    var context: Context,
-    val listener: ProductsListener
-) : FirestoreRecyclerAdapter<Product, RecyclerView.ViewHolder>(options!!) {
+class ProdutosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var productsListFiltered: ArrayList<Product> = ArrayList()
+    var products: ArrayList<Product> = arrayListOf()
+    var listener: ProductsListener? = null
+    var userViewModel: UserViewModel? = null
+    var context: Context? = null
+
+    fun addProducts(
+        list: ArrayList<Product>,
+        userViewModel: UserViewModel,
+        context: Context,
+        listener: ProductsListener
+    ) {
+        products.clear()
+        products.addAll(list)
+        productsListFiltered = list
+        this.userViewModel = userViewModel
+        this.listener = listener
+        this.context = context
+    }
+
+    fun filterList(list: ArrayList<Product>) {
+        products = list
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ProdutosViewHolder(
@@ -28,29 +45,31 @@ class ProdutosAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: Product) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = holder as ProdutosViewHolder
         viewHolder.apply {
-            imageProduct(model)
+            imageProduct(products[position])
             deleteAndUpdateIsVisible(userViewModel)
         }
 
         viewHolder.view.delete_products.setOnClickListener {
-            listener.deleteProduct(snapshots.getSnapshot(viewHolder.adapterPosition).reference)
+            listener?.deleteProduct(products[position].id)
         }
 
         viewHolder.view.edit_products.setOnClickListener {
-            listener.editProduct(snapshots.getSnapshot(position).reference.id)
+            listener?.editProduct(products[position].id)
         }
 
         viewHolder.view.setOnClickListener {
-            listener.clickProduct(snapshots.getSnapshot(position).reference.id)
+            listener?.clickProduct(products[position].id)
         }
     }
 
+    override fun getItemCount() = products.size
+
     interface ProductsListener {
-        fun deleteProduct(productId: DocumentReference)
-        fun clickProduct(productId: String)
-        fun editProduct(productId: String)
+        fun deleteProduct(productId: String?)
+        fun clickProduct(productId: String?)
+        fun editProduct(productId: String?)
     }
 }

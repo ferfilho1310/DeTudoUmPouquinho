@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.databinding.ProductsActivityBinding
@@ -19,13 +20,11 @@ import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,11 +33,13 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     private val productsViewModel: ProductsViewModel by viewModel()
     private val userViewModel: UserViewModel by viewModel()
-    private var options: FirestoreRecyclerOptions<Product>? = null
-    private var productsAdapter: ProdutosAdapter? = null
+    private val productsAdapter by lazy { ProdutosAdapter() }
     private val RECORD_REQUEST_CODE = 101
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var binding: ProductsActivityBinding
+    lateinit var listProduct: ArrayList<Product>
+
+    private var isRefresing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,8 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
         productsViewModel.loadProducts()
 
+        listProduct = ArrayList()
+
         binding.insertNewProduct.setOnClickListener(this)
         binding.imgProfile.setOnClickListener(this)
 
@@ -59,6 +62,18 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         setSearchView()
         loadAds()
         setViewModel()
+        setSwipeRefreshLayoutProducts()
+        setAdapter()
+    }
+
+    private fun setSwipeRefreshLayoutProducts() {
+        binding.apply {
+            swProducts.setOnRefreshListener {
+                productsViewModel.loadProducts()
+                swProducts.isRefreshing = false
+                isRefresing = true
+            }
+        }
     }
 
     private fun setSearchView() {
@@ -69,7 +84,10 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(p0: String?): Boolean {
-                    productsViewModel.searchProduct(p0.orEmpty())
+                    filter(p0.orEmpty())
+                    if (isRefresing) {
+                        filter("")
+                    }
                     return false
                 }
 
@@ -84,7 +102,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.insert_new_product -> {
-                val bottomSheetDialogFragment = InsertProductBottomFragment()
+                val bottomSheetDialogFragment = InsertProductBottomFragment(productsAdapter)
                 bottomSheetDialogFragment.isCancelable = false
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
@@ -105,26 +123,20 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         } ?: run {
             binding.insertNewProduct.isVisible = false
         }
-
-        if (productsAdapter != null) {
-            productsAdapter!!.startListening()
-        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (productsAdapter != null) {
-            productsAdapter!!.stopListening()
+    private fun filter(text: String) {
+        val filteredlist: ArrayList<Product> = ArrayList()
+
+        for (item in listProduct) {
+            if (item.nameProduct!!.toLowerCase().contains(text.toLowerCase())) {
+                filteredlist.add(item)
+            }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        productsViewModel.loadProducts()
-
-        if(productsAdapter != null) {
-            productsAdapter!!.startListening()
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(this, "Ainda não temos este produto", Toast.LENGTH_SHORT).show()
+        } else {
+            productsAdapter.filterList(filteredlist)
         }
     }
 
@@ -159,38 +171,37 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setObservers() {
         productsViewModel.loadProductLiveData.observe(this) {
-            options = FirestoreRecyclerOptions.Builder<Product>()
-                .setQuery(it, Product::class.java)
-                .build()
-
-            productsAdapter = ProdutosAdapter(
-                options,
+            isRefresing = false
+            listProduct.clear()
+            listProduct.addAll(it)
+            productsAdapter.addProducts(
+                it,
                 userViewModel,
                 this,
                 object : ProdutosAdapter.ProductsListener {
-                    override fun deleteProduct(productId: DocumentReference) {
+                    override fun deleteProduct(productId: String?) {
                         productsViewModel.deleteProduct(productId)
                     }
 
-                    override fun clickProduct(productId: String) {
+                    override fun clickProduct(productId: String?) {
                         showDetailsProduct(productId)
                     }
 
-                    override fun editProduct(productId: String) {
+                    override fun editProduct(productId: String?) {
                         updateProduct(productId)
                     }
-                }
-            )
+                })
+            productsAdapter.notifyDataSetChanged()
+        }
+    }
 
-            binding.rcProducts.apply {
-                adapter = productsAdapter
-                layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                setHasFixedSize(true)
-                isNestedScrollingEnabled = true
-            }
-
-            productsAdapter?.startListening()
+    private fun setAdapter() {
+        binding.rcProducts.apply {
+            layoutManager =
+                GridLayoutManager(context, 2)
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = true
+            adapter = productsAdapter
         }
     }
 
@@ -205,6 +216,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         productsViewModel.deleteProductLiveData.observe(this) {
             if (it == true) {
                 Toast.makeText(this, "Produto deletado", Toast.LENGTH_SHORT).show();
+                setSwipeRefreshLayoutProducts()
             } else {
                 Toast.makeText(this, "Erro ao deletar produto", Toast.LENGTH_SHORT)
                     .show()
@@ -212,13 +224,18 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun showDetailsProduct(productId: String) {
-        val intent = Intent(this, ProductDetailsActivity::class.java)
-        intent.putExtra("position", productId)
-        startActivity(intent)
+    private fun showDetailsProduct(productId: String?) {
+        productId?.let {
+            val intent = Intent(this, ProductDetailsActivity::class.java)
+            intent.putExtra("position", it)
+            startActivity(intent)
+        } ?: run {
+            Toast.makeText(this, "Produto indisponível no momento.", Toast.LENGTH_LONG).show()
+        }
+
     }
 
-    private fun updateProduct(productId: String) {
+    private fun updateProduct(productId: String?) {
         val intent = Intent(this, ProductUpdateActivity::class.java)
         intent.putExtra("position", productId)
         startActivity(intent)
