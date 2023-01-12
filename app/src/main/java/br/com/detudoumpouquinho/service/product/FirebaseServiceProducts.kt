@@ -18,9 +18,6 @@ class FirebaseServiceProducts : FirebaseServiceProductsContract {
 
     private val firestoreInstance = FirebaseFirestore.getInstance()
 
-    private val loadNewProductListener by lazy { MutableLiveData<Query>() }
-    private val updateProduct by lazy { MutableLiveData<Boolean>() }
-
     override fun insertNewProduct(product: Product): Flow<Boolean> {
         return callbackFlow {
             val map: MutableMap<String, Any?> = HashMap()

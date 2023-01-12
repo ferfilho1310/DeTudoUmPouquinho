@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.view.viewHolder.AdViewHolder
 import br.com.detudoumpouquinho.view.viewHolder.ProdutosViewHolder
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import kotlinx.android.synthetic.main.products_item_view_holder.view.*
@@ -39,29 +40,32 @@ class ProdutosAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ProdutosViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.products_item_view_holder, parent, false),
-            parent.context
-        )
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.products_item_view_holder, parent, false),
+                parent.context
+            )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val viewHolder = holder as ProdutosViewHolder
-        viewHolder.apply {
-            imageProduct(products[position])
-            deleteAndUpdateIsVisible(userViewModel)
-        }
+        when (holder) {
+            is ProdutosViewHolder -> {
+                holder.apply {
+                    imageProduct(products[position])
+                    deleteAndUpdateIsVisible(userViewModel)
+                }
 
-        viewHolder.view.delete_products.setOnClickListener {
-            listener?.deleteProduct(products[position].id)
-        }
+                holder.view.delete_products.setOnClickListener {
+                    listener?.deleteProduct(products[position].id)
+                }
 
-        viewHolder.view.edit_products.setOnClickListener {
-            listener?.editProduct(products[position].id)
-        }
+                holder.view.edit_products.setOnClickListener {
+                    listener?.editProduct(products[position].id)
+                }
 
-        viewHolder.view.setOnClickListener {
-            listener?.clickProduct(products[position].id)
+                holder.view.setOnClickListener {
+                    listener?.clickProduct(products[position].id)
+                }
+            }
         }
     }
 

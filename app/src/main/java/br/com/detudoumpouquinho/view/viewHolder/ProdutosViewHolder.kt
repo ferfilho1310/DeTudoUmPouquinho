@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -22,8 +23,6 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
     val imgProduct = view.findViewById<ImageView>(R.id.img_produtos_main)
     val valueProduct = view.findViewById<TextView>(R.id.product_value)
     val title = view.findViewById<TextView>(R.id.title)
-    val delete = view.findViewById<ImageButton>(R.id.delete_products)
-    val update = view.findViewById<ImageButton>(R.id.edit_products)
     val paymentFormView = view.findViewById<TextView>(R.id.payment_form)
 
     fun imageProduct(product: Product) {
@@ -33,18 +32,25 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(imgProduct)
-            valueProduct.text = "R$ ".plus(value)
+            valueProduct.text = SIMBOLOS.REAIS.plus(value)
             title.text = nameProduct
-            paymentFormView.text = paymentForm
+            paymentForm?.let {
+                paymentFormView.text = it
+                paymentFormView.isVisible = true
+            }
+
         }
     }
 
     fun deleteAndUpdateIsVisible(userViewModel: UserViewModel?) {
         userViewModel?.searchIdUser?.observe(context as LifecycleOwner) {
             if (it.identifier != USER) {
-                delete.isVisible = true
-                update.isVisible = true
+                view.findViewById<LinearLayout>(R.id.linearLayout5).isVisible = true
             }
         }
+    }
+
+    object SIMBOLOS {
+        const val REAIS = "R$"
     }
 }

@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/payment_form">
@@ -33,16 +34,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:background="@android:color/white"
-                android:src="@drawable/ic_edit_products"
-                android:visibility="gone" />
+                android:src="@drawable/ic_edit_products"/>
 
             <ImageButton
                 android:id="@+id/delete_products"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:src="@drawable/ic_product_delete"
-                android:visibility="gone" />
+                android:src="@drawable/ic_product_delete" />
         </LinearLayout>
 
         <ImageView
@@ -89,6 +88,7 @@
             android:text="Até 12 vezes no cartão"
             android:textColor="@color/dark_blue"
             android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/product_value"
             app:layout_constraintTop_toBottomOf="@+id/product_value" />
 

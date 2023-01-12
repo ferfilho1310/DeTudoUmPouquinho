@@ -14,7 +14,8 @@
         android:background="#CBCCD6"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -44,7 +45,8 @@
                 app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
                 app:tabPaddingEnd="7dp"
-                app:tabPaddingStart="7dp" />
+                app:tabPaddingStart="7dp"
+                tools:ignore="SpeakableTextPresentCheck" />
         </androidx.viewpager.widget.ViewPager>
 
         <com.airbnb.lottie.LottieAnimationView
@@ -57,8 +59,7 @@
             app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_url="https://assets5.lottiefiles.com/private_files/lf30_8ovwz3n6.json" />
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,11 +101,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Iphone XR 13"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Iphone XR 13"/>
 
                 <TextView
                     android:id="@+id/lojista"
@@ -112,8 +113,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Lucas Imports"
                     android:textSize="12sp"
+                    tools:text="Lucas Imports"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/value_product"
                     app:layout_constraintStart_toStartOf="@+id/title_product"
@@ -124,9 +125,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="R$ 258,99"
                     android:textColor="@color/dark_green"
                     android:textStyle="bold"
+                    tools:text="R$ 258,99"
                     app:layout_constraintBottom_toBottomOf="@+id/lojista"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/lojista" />
@@ -194,5 +195,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/tv_product_not_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Produto indisponível no momento"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

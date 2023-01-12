@@ -141,7 +141,9 @@ class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialog
                         )
                         context?.let {
                             Utils.uriToBitmap(data, requireContext().contentResolver)
-                                .let { photos.add(it!!) }
+                                .let {
+                                    photos.add(it!!)
+                                }
                         }
 
                     } catch (e: Exception) {

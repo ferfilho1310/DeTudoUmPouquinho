@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.databinding.ProductDetailsBinding
 import br.com.detudoumpouquinho.model.Product
@@ -48,7 +49,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.img_close_product_detail -> {
-                val iProductsActivity = Intent(this,ProductsActivity::class.java)
+                val iProductsActivity = Intent(this, ProductsActivity::class.java)
                 startActivity(iProductsActivity)
                 finish()
             }
@@ -59,6 +60,26 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                         Context.MODE_PRIVATE
                     )
                 viewModelProducts.doRequest(sharedPreferences?.getBoolean("semcadastro", false))
+            }
+        }
+    }
+
+    private fun productNotFound() {
+        product?.let {
+            binding.apply {
+                nestedScrollView.isVisible = true
+                viewPager.isVisible = true
+                adviewProductDetails.isVisible = true
+                btFazerPedido.isVisible = true
+                tvProductNotFound.isVisible = false
+            }
+        } ?: run {
+            binding.apply {
+                nestedScrollView.isVisible = false
+                viewPager.isVisible = false
+                adviewProductDetails.isVisible = false
+                btFazerPedido.isVisible = false
+                tvProductNotFound.isVisible = true
             }
         }
     }
@@ -95,6 +116,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 lojista.text = it?.seller
             }
             product = it
+
+            productNotFound()
         }
 
         viewModelProducts.isClientRegister.observe(this) {

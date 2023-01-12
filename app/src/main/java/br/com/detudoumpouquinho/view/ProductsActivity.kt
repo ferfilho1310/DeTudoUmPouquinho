@@ -115,7 +115,6 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-
         FirebaseAuth.getInstance().currentUser?.let {
             userViewModel.searchIdUser(
                 it.uid
@@ -198,7 +197,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     private fun setAdapter() {
         binding.rcProducts.apply {
             layoutManager =
-                GridLayoutManager(context, 2)
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             setHasFixedSize(true)
             isNestedScrollingEnabled = true
             adapter = productsAdapter
