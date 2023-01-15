@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import kotlinx.android.synthetic.main.sign_user_activity.*
@@ -49,26 +50,32 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setObservers() {
         userViewModel.signUser.observe(this) {
-            if (it == true) {
-                lottie.visibility = View.GONE
-                bt_sign_user.visibility = View.VISIBLE
+            when (it) {
+                is Response.LOADING -> {
+                    lottie.visibility = View.VISIBLE
+                    bt_sign_user.visibility = View.GONE
+                }
+                is Response.SUCCESS -> {
+                    lottie.visibility = View.GONE
+                    bt_sign_user.visibility = View.VISIBLE
 
-                startProductActivity()
+                    startProductActivity()
 
-                val sharedPreferences =
-                    getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
-                val edit = sharedPreferences.edit()
-                edit.putBoolean("semcadastro", true)
-                edit.apply()
-
-            } else {
-                Toast.makeText(
-                    this,
-                    "Verifique o e-mail e a senha digitada.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                lottie.visibility = View.GONE
-                bt_sign_user.visibility = View.VISIBLE
+                    val sharedPreferences =
+                        getSharedPreferences(WITHOUT_REGISTRATION, Context.MODE_PRIVATE)
+                    val edit = sharedPreferences.edit()
+                    edit.putBoolean("semcadastro", true)
+                    edit.apply()
+                }
+                is Response.ERROR -> {
+                    lottie.visibility = View.GONE
+                    bt_sign_user.visibility = View.VISIBLE
+                    Toast.makeText(
+                        this,
+                        "Verifique o e-mail e a senha digitada.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

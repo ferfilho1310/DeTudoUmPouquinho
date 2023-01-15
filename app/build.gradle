@@ -16,6 +16,8 @@ android {
         versionCode 2
         versionName "2.0"
 
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -88,4 +90,10 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+
+    //AppsFlyer
+    implementation 'com.appsflyer:af-android-sdk:6.9.0'
+
+    //MultiDex
+    implementation 'com.android.support:multidex:1.0.3'
 }

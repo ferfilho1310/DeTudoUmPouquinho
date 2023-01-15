@@ -2,12 +2,12 @@ package br.com.detudoumpouquinho.view
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.model.User
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import kotlinx.android.synthetic.main.create_new_user_activity.*
@@ -44,35 +44,42 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setObservers() {
         userViewModel.createUser.observe(this) {
-            if (it == true) {
-                lottie_create_user.visibility = View.GONE
-                create_user_button.visibility = View.VISIBLE
-                val sharedPreferences =
-                    getSharedPreferences(
-                        SignUserActivity.WITHOUT_REGISTRATION,
-                        Context.MODE_PRIVATE
-                    )
-
-                if (sharedPreferences?.getBoolean("semcadastro", false) != true){
-                    val edit = sharedPreferences.edit()
-                    edit.putBoolean("semcadastro", true)
-                    edit.apply()
-                    finish()
+            when(it) {
+                is Response.LOADING -> {
+                    lottie_create_user.visibility = View.VISIBLE
+                    create_user_button.visibility = View.GONE
                 }
+                is Response.SUCCESS -> {
+                    lottie_create_user.visibility = View.GONE
+                    create_user_button.visibility = View.VISIBLE
+                    val sharedPreferences =
+                        getSharedPreferences(
+                            SignUserActivity.WITHOUT_REGISTRATION,
+                            Context.MODE_PRIVATE
+                        )
 
-                Toast.makeText(
-                    this,
-                    "Usuário criado com sucesso",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                lottie_create_user.visibility = View.GONE
-                create_user_button.visibility = View.VISIBLE
-                Toast.makeText(
-                    this,
-                    "Verifique seu e-mail ou se a senha tem mais de 6 caracteres.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    if (sharedPreferences?.getBoolean("semcadastro", false) != true){
+                        val edit = sharedPreferences.edit()
+                        edit.putBoolean("semcadastro", true)
+                        edit.apply()
+                        finish()
+                    }
+
+                    Toast.makeText(
+                        this,
+                        "Usuário criado com sucesso",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is Response.ERROR -> {
+                    lottie_create_user.visibility = View.GONE
+                    create_user_button.visibility = View.VISIBLE
+                    Toast.makeText(
+                        this,
+                        "Verifique seu e-mail ou se a senha tem mais de 6 caracteres.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

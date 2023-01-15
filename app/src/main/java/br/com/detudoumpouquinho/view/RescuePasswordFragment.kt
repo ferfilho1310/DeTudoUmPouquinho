@@ -7,18 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response.*
 import br.com.detudoumpouquinho.databinding.RescuePasswordFragmentBinding
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.rescue_password_fragment.*
 import org.koin.android.ext.android.inject
 
 class RescuePasswordFragment : BottomSheetDialogFragment(), View.OnClickListener {
@@ -55,6 +52,7 @@ class RescuePasswordFragment : BottomSheetDialogFragment(), View.OnClickListener
             R.id.img_close_rescue_password -> dismiss()
         }
     }
+
     private fun listeners() {
         binding.btRescuePassword.setOnClickListener(this)
         binding.imgCloseRescuePassword.setOnClickListener(this)
@@ -62,39 +60,47 @@ class RescuePasswordFragment : BottomSheetDialogFragment(), View.OnClickListener
 
     private fun setViewModel() {
         viewModel.rescuePasswordUser.observe(this) {
-            if (it == true) {
-                dismiss()
-
-                val i = Intent(
-                    requireActivity(),
-                    SignUserActivity::class.java
-                )
-                requireActivity().startActivity(i)
-                requireActivity().finish()
-
-                val sharedPreferences =
-                    requireActivity().getSharedPreferences(
-                        SignUserActivity.WITHOUT_REGISTRATION,
-                        Context.MODE_PRIVATE
-                    )
-
-                FirebaseAuth.getInstance().signOut().also {
-                    sharedPreferences.edit().clear().apply()
+            when (it) {
+                is LOADING -> {
+                    binding.btRescuePassword.visibility = View.GONE
+                    binding.lottieRescuePassword.visibility = View.VISIBLE
                 }
+                is SUCCESS -> {
+                    binding.btRescuePassword.visibility = View.VISIBLE
+                    binding.lottieRescuePassword.visibility = View.GONE
 
-                binding.btRescuePassword.visibility = View.VISIBLE
-                lottieRescuePassword.visibility = View.GONE
 
-                Toast.makeText(
-                    context,
-                    "Foi enviado um e-mail de recuperação para o seu e-mail cadastrado",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                binding.btRescuePassword.visibility = View.VISIBLE
-                lottieRescuePassword.visibility = View.GONE
-                Toast.makeText(context, "Verifique o e-mail digitado", Toast.LENGTH_SHORT)
-                    .show()
+                    val i = Intent(
+                        requireActivity(),
+                        SignUserActivity::class.java
+                    )
+                    requireActivity().startActivity(i)
+                    requireActivity().finish()
+
+                    val sharedPreferences =
+                        requireActivity().getSharedPreferences(
+                            SignUserActivity.WITHOUT_REGISTRATION,
+                            Context.MODE_PRIVATE
+                        )
+
+                    FirebaseAuth.getInstance().signOut().also {
+                        sharedPreferences.edit().clear().apply()
+                    }
+
+
+                    Toast.makeText(
+                        context,
+                        "Foi enviado um e-mail de recuperação para o seu e-mail cadastrado",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    dismiss()
+                }
+                is ERROR -> {
+                    binding.btRescuePassword.visibility = View.VISIBLE
+                    binding.lottieRescuePassword.visibility = View.GONE
+                    Toast.makeText(context, "Verifique o e-mail digitado", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
     }

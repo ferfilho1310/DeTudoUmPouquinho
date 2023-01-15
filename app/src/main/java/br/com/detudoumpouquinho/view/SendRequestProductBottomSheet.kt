@@ -7,15 +7,18 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.SendRequestProductFragmentBinding
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.viewModel.remoteConfig.RemoteConfigViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -68,7 +71,10 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
 
     private fun imageOfProduct() {
         extras?.apply {
-            Glide.with(requireActivity()).load(Utils.stringToBitMap(image?.get(0)))
+            Glide.with(requireActivity())
+                .load(Utils.stringToBitMap(image?.get(0)))
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .centerCrop()
                 .into(binding.imgPreviewRequestProduct)
             binding.tvNameProduct.text = nameProduct.orEmpty()
             binding.tvValueProduct.text = "R$ ".plus(value)
@@ -77,7 +83,15 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
 
     private fun fetchCelPhoneRemoteConfig() {
         remoteConfig.celularLiveData.observe(requireActivity()) {
-            celular = it
+            when (it) {
+                is Response.SUCCESS -> {
+                    celular = it.data.orEmpty()
+                }
+                is Response.ERROR -> {
+                    Log.e("ERROR", "Houve um erro ao buscar o numero do telefone no remoteConfig")
+                }
+                else -> Unit
+            }
         }
     }
 
@@ -98,7 +112,7 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
         }
     }
 
-    private fun messageSendWhatsApp() {
+    private fun buildMessageSendMessageWhatsApp() {
         val text = StringBuilder()
         val textNoSalve = StringBuilder()
 
@@ -132,7 +146,7 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
                 dismiss()
             }
             R.id.bt_finish_request -> {
-                messageSendWhatsApp()
+                buildMessageSendMessageWhatsApp()
             }
         }
     }

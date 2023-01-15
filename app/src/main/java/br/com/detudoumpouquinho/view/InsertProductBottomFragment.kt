@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.InsertProductFragmentBinding
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
@@ -165,20 +166,25 @@ class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialog
 
     private fun setObserver() {
         viewModel.insertProductLiveData.observe(requireActivity()) {
-            if (it == true) {
-                binding.lottieInsertProduct.visibility = View.GONE
-                binding.button.visibility = View.VISIBLE
-                val iProductsActivity = Intent(requireContext(),ProductsActivity::class.java)
-                startActivity(iProductsActivity)
-                dismiss()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Houve algum problema ao tentar inserir o produto",
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.lottieInsertProduct.visibility = View.GONE
-                binding.button.visibility = View.VISIBLE
+            when(it){
+                is Response.LOADING -> {
+                    binding.lottieInsertProduct.visibility = View.VISIBLE
+                    binding.button.visibility = View.GONE
+                }
+                is Response.SUCCESS -> {
+                    val iProductsActivity = Intent(requireContext(),ProductsActivity::class.java)
+                    startActivity(iProductsActivity)
+                    dismiss()
+                }
+                is Response.ERROR -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Houve algum problema ao tentar inserir o produto",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.lottieInsertProduct.visibility = View.GONE
+                    binding.button.visibility = View.VISIBLE
+                }
             }
         }
     }

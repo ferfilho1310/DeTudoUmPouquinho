@@ -2,7 +2,6 @@ package br.com.detudoumpouquinho.view.viewHolder
 
 import android.content.Context
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
-import br.com.detudoumpouquinho.view.ProductsActivity
 import br.com.detudoumpouquinho.view.ProductsActivity.Companion.USER
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import com.bumptech.glide.Glide
@@ -32,13 +30,13 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(imgProduct)
-            valueProduct.text = SIMBOLOS.REAIS.plus(value)
+            valueProduct.text = SIMBOL.REAIS.plus(value)
             title.text = nameProduct
-            paymentForm?.let {
-                paymentFormView.text = it
+
+            if(!paymentForm.isNullOrEmpty()){
+                paymentFormView.text = paymentForm
                 paymentFormView.isVisible = true
             }
-
         }
     }
 
@@ -50,7 +48,7 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
         }
     }
 
-    object SIMBOLOS {
+    object SIMBOL {
         const val REAIS = "R$"
     }
 }

@@ -14,7 +14,8 @@
         android:background="@color/white"
         android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_products_imagens_update"
@@ -45,6 +46,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline7"
+        tools:ignore="SpeakableTextPresentCheck"
         tools:listItem="" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -82,9 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Título"
-                android:textCursorDrawable="@color/black"
                 android:inputType="textAutoComplete"
-                android:theme="@style/EditTextTheme" />
+                android:textCursorDrawable="@color/black"
+                android:theme="@style/EditTextTheme"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +103,8 @@
                 android:layout_marginTop="8dp"
                 android:hint="Subtitulo"
                 android:inputType="textAutoComplete"
-                android:theme="@style/EditTextTheme" />
+                android:theme="@style/EditTextTheme"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,7 +120,8 @@
                 android:layout_marginTop="8dp"
                 android:hint="Descrição"
                 android:inputType="textMultiLine"
-                android:theme="@style/EditTextTheme" />
+                android:theme="@style/EditTextTheme"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +137,8 @@
                 android:layout_marginTop="8dp"
                 android:hint="Valor"
                 android:inputType="numberDecimal"
-                android:theme="@style/EditTextTheme" />
+                android:theme="@style/EditTextTheme"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +152,8 @@
                 android:id="@+id/product_payment_form_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +167,8 @@
                 android:id="@+id/product_value_frete_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

@@ -12,9 +12,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.ProductsActivityBinding
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
@@ -69,6 +69,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     private fun setSwipeRefreshLayoutProducts() {
         binding.apply {
             swProducts.setOnRefreshListener {
+                binding.pgProducts.isVisible = false
                 productsViewModel.loadProducts()
                 swProducts.isRefreshing = false
                 isRefresing = true
@@ -116,9 +117,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         FirebaseAuth.getInstance().currentUser?.let {
-            userViewModel.searchIdUser(
-                it.uid
-            )
+                userViewModel.searchIdUser(
+                    it.uid
+                )
         } ?: run {
             binding.insertNewProduct.isVisible = false
         }
@@ -170,27 +171,40 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setObservers() {
         productsViewModel.loadProductLiveData.observe(this) {
-            isRefresing = false
-            listProduct.clear()
-            listProduct.addAll(it)
-            productsAdapter.addProducts(
-                it,
-                userViewModel,
-                this,
-                object : ProdutosAdapter.ProductsListener {
-                    override fun deleteProduct(productId: String?) {
-                        productsViewModel.deleteProduct(productId)
-                    }
+            when (it) {
+                is Response.LOADING -> {
+                    binding.pgProducts.isVisible = true
+                }
+                is Response.SUCCESS -> {
+                    binding.pgProducts.isVisible = false
+                    isRefresing = false
+                    listProduct.clear()
+                    listProduct.addAll(it.data.orEmpty())
+                    productsAdapter.addProducts(
+                        it.data.orEmpty() as ArrayList<Product>,
+                        userViewModel,
+                        this,
+                        object : ProdutosAdapter.ProductsListener {
+                            override fun deleteProduct(productId: String?) {
+                                productsViewModel.deleteProduct(productId)
+                            }
 
-                    override fun clickProduct(productId: String?) {
-                        showDetailsProduct(productId)
-                    }
+                            override fun clickProduct(productId: String?) {
+                                showDetailsProduct(productId)
+                            }
 
-                    override fun editProduct(productId: String?) {
-                        updateProduct(productId)
-                    }
-                })
-            productsAdapter.notifyDataSetChanged()
+                            override fun editProduct(productId: String?) {
+                                updateProduct(productId)
+                            }
+                        })
+                    productsAdapter.notifyDataSetChanged()
+                }
+                is Response.ERROR -> {
+                    binding.pgProducts.isVisible = false
+                    Toast.makeText(this, "Nenhum produto foi encontrado", Toast.LENGTH_LONG).show()
+                }
+            }
+
         }
     }
 
@@ -213,12 +227,16 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         productsViewModel.deleteProductLiveData.observe(this) {
-            if (it == true) {
-                Toast.makeText(this, "Produto deletado", Toast.LENGTH_SHORT).show();
-                setSwipeRefreshLayoutProducts()
-            } else {
-                Toast.makeText(this, "Erro ao deletar produto", Toast.LENGTH_SHORT)
-                    .show()
+            when(it){
+                is Response.SUCCESS -> {
+                    Toast.makeText(this, "Produto deletado", Toast.LENGTH_SHORT).show();
+                    setSwipeRefreshLayoutProducts()
+                }
+                is Response.ERROR -> {
+                    Toast.makeText(this, "Erro ao deletar produto", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else -> Unit
             }
         }
     }

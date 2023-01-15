@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.onboarding.view.OnboardingActivity
 
-
 @SuppressLint("CustomSplashScreen")
 class SplashscreenActivity : AppCompatActivity() {
 
@@ -25,27 +24,38 @@ class SplashscreenActivity : AppCompatActivity() {
         window.navigationBarColor = resources.getColor(R.color.light_blue)
 
         sharedPreferences =
-            getSharedPreferences(OnboardingActivity.SKIPPED.SKIPPED_ONBOARDING, Context.MODE_PRIVATE)
+            getSharedPreferences(
+                OnboardingActivity.SKIPPED.SKIPPED_ONBOARDING,
+                Context.MODE_PRIVATE
+            )
 
         result = sharedPreferences.getBoolean("skipped", false)
 
+        handlerOnBoarding()
+    }
+
+    private fun handlerOnBoarding() {
         Handler().postDelayed(
             {
                 if (result) {
-                    startSing()
+                    startSign()
                 } else {
                     val i = Intent(this, OnboardingActivity::class.java)
                     startActivity(i)
                     finish()
                 }
             },
-            3000
+            DELAY.TIME
         )
     }
 
-    private fun startSing() {
+    private fun startSign() {
         val i = Intent(this, ProductsActivity::class.java)
         startActivity(i)
         finish()
+    }
+
+    private object DELAY {
+        const val TIME = 3000L
     }
 }

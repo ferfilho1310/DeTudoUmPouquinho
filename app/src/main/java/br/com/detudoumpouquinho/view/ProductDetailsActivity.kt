@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.ProductDetailsBinding
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
@@ -14,6 +16,7 @@ import br.com.detudoumpouquinho.view.adapter.ImageAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.product_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -64,6 +67,13 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val iProductsActivity = Intent(this, ProductsActivity::class.java)
+        startActivity(iProductsActivity)
+        finish()
+    }
+
     private fun productNotFound() {
         product?.let {
             binding.apply {
@@ -95,29 +105,53 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
         binding.btFazerPedido.setOnClickListener(this)
     }
 
+
+    private fun eventClicked(product: Product) {
+        val parameters = Bundle().apply {
+            putParcelable("Product_Clicked", product)
+        }
+
+        FirebaseAnalytics.getInstance(this).logEvent("product_clicked", parameters)
+    }
+
     private fun setViewModel() {
         binding.lottieProductDetails.visibility = View.VISIBLE
         binding.viewPager.visibility = View.GONE
 
         viewModelProducts.searchProductIdLiveData.observe(this) {
+            when (it) {
+                is Response.LOADING -> {
+                    binding.lottieProductDetails.visibility = View.VISIBLE
+                    binding.viewPager.visibility = View.GONE
+                }
+                is Response.SUCCESS -> {
+                    binding.lottieProductDetails.visibility = View.GONE
+                    binding.viewPager.visibility = View.VISIBLE
 
-            binding.lottieProductDetails.visibility = View.GONE
-            binding.viewPager.visibility = View.VISIBLE
+                    it.data?.image?.forEach { image ->
+                        Utils.stringToBitMap(image).also { imageBitmap ->
+                            imageBitmap?.let { it1 -> imageAdapter?.setItems(it1) }
+                        }
+                    }
+                    binding.apply {
+                        titleProduct.text = it.data?.nameProduct
+                        valueProduct.text = "R$ ".plus(it.data?.value)
+                        descriptionProductDetails.text = it.data?.description
+                        lojista.text = it.data?.seller
+                    }
 
-            it?.image?.forEach { image ->
-                Utils.stringToBitMap(image).also { imageBitmap ->
-                    imageBitmap?.let { it1 -> imageAdapter?.setItems(it1) }
+                    product = it.data
+
+                    productNotFound()
+                }
+                is Response.ERROR -> {
+                    Toast.makeText(
+                        this,
+                        "Houve alguma erro ao carregar os detalhes do produto",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-            binding.apply {
-                titleProduct.text = it?.nameProduct
-                valueProduct.text = "R$ ".plus(it?.value)
-                descriptionProductDetails.text = it?.description
-                lojista.text = it?.seller
-            }
-            product = it
-
-            productNotFound()
         }
 
         viewModelProducts.isClientRegister.observe(this) {

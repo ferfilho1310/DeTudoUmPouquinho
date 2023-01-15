@@ -57,6 +57,22 @@ class FirebaseServiceUser : FirebaseServiceUserContract {
         }
     }
 
+    override fun signUserAnonimous(): Flow<Boolean> {
+        return callbackFlow {
+            val listener = firestoreCreateUserInstance
+                .signInAnonymously()
+                .addOnSuccessListener {
+                    trySend(true).isSuccess
+                }.addOnFailureListener {
+                    trySend(false).isSuccess
+                }
+
+            awaitClose {
+                listener.isComplete
+            }
+        }
+    }
+
     override fun searchIdUser(userId: String): Flow<User?> {
         return callbackFlow {
             val listener = firestoreInstance

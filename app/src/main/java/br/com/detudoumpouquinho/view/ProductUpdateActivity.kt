@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.detudoumpouquinho.R
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.ProductUpdateActivityBinding
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.model.Product
@@ -46,18 +47,35 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setViewModel() {
         productsViewModel.searchProductIdLiveData.observe(this) { product ->
-            product?.let {
-                it.image?.forEach { image ->
-                    adapter.listFotos(image)
-                    photos.add(image)
+            when (product) {
+                is Response.LOADING -> {
+                    lottie_update_product.visibility = View.VISIBLE
+                    bt_update_procut.visibility = View.GONE
                 }
-                binding.apply {
-                    titleUpdated.setText(it.nameProduct)
-                    subtitleUpdated.setText(it.seller)
-                    descriptionUpdate.setText(it.description)
-                    valueUpdate.setText(it.value)
-                    productValueFreteUpdate.setText(it.valueFrete)
-                    productPaymentFormUpdate.setText(it.paymentForm)
+                is Response.SUCCESS -> {
+                    lottie_update_product.visibility = View.GONE
+                    bt_update_procut.visibility = View.VISIBLE
+                    product.data?.let {
+                        it.image?.forEach { image ->
+                            adapter.listFotos(image)
+                            photos.add(image)
+                        }
+                        binding.apply {
+                            titleUpdated.setText(it.nameProduct)
+                            subtitleUpdated.setText(it.seller)
+                            descriptionUpdate.setText(it.description)
+                            valueUpdate.setText(it.value)
+                            productValueFreteUpdate.setText(it.valueFrete)
+                            productPaymentFormUpdate.setText(it.paymentForm)
+                        }
+                    }
+                }
+                is Response.ERROR -> {
+                    Toast.makeText(
+                        this,
+                        "Houve algum problema ao atualizar o produto",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -85,12 +103,9 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
                         title_updated.error = "Digite o titulo"
                     }
                     subtitle_updated.text.toString().isEmpty() -> {
-                        subtitle_updated.error = "Digite o nome do lojista"
+                        subtitle_updated.error = "Digite o nome do subtitulo"
                     }
                     else -> {
-                        lottie_update_product.visibility = View.VISIBLE
-                        bt_update_procut.visibility = View.GONE
-
                         val produto = Product(
                             nameProduct = title_updated.text.toString(),
                             seller = subtitle_updated.text.toString(),
@@ -149,16 +164,27 @@ class ProductUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setObserver() {
         productsViewModel.updateProductLiveData.observe(this) {
-            if (it == true) {
-                lottie_update_product.visibility = View.GONE
-                bt_update_procut.visibility = View.VISIBLE
-                intentProductActivity()
-                Toast.makeText(this, "Produto atualizado", Toast.LENGTH_SHORT).show();
-            } else {
-                lottie_update_product.visibility = View.GONE
-                bt_update_procut.visibility = View.VISIBLE
-                Toast.makeText(this, "Falha ao atualizar produto", Toast.LENGTH_SHORT)
-                    .show();
+            when (it) {
+                is Response.LOADING -> {
+                    binding.apply {
+                        lottieUpdateProduct.visibility = View.VISIBLE
+                        btUpdateProcut.visibility = View.GONE
+                    }
+                }
+                is Response.SUCCESS -> {
+                    binding.apply {
+                        lottieUpdateProduct.visibility = View.GONE
+                        btUpdateProcut.visibility = View.VISIBLE
+                    }
+                    intentProductActivity()
+                    Toast.makeText(this, "Produto atualizado", Toast.LENGTH_SHORT).show();
+                }
+                is Response.ERROR -> {
+                    lottie_update_product.visibility = View.GONE
+                    bt_update_procut.visibility = View.VISIBLE
+                    Toast.makeText(this, "Falha ao atualizar o produto", Toast.LENGTH_SHORT)
+                        .show();
+                }
             }
         }
     }

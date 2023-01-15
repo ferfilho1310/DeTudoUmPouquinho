@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.model.Product
 import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.service.product.FirebaseServiceProductsContract
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.Query
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,95 +19,81 @@ class ProductsViewModel(
 ) : ViewModel(),
     ProductsViewModelContract {
 
-    private var _insertProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    var insertProductLiveData: LiveData<Boolean> = _insertProductLiveData
+    private var _insertProductLiveData: MutableLiveData<Response<Boolean>> = MutableLiveData()
+    var insertProductLiveData: LiveData<Response<Boolean>> = _insertProductLiveData
 
-    private var _loadProductLiveData: MutableLiveData<ArrayList<Product>> = MutableLiveData()
-    var loadProductLiveData: LiveData<ArrayList<Product>> = _loadProductLiveData
+    private var _loadProductLiveData: MutableLiveData<Response<ArrayList<Product>>> = MutableLiveData()
+    var loadProductLiveData: LiveData<Response<ArrayList<Product>>> = _loadProductLiveData
 
-    private var _updateListProductLiveData: MutableLiveData<ArrayList<Product>> = MutableLiveData()
-    var updateListProductLiveData: LiveData<ArrayList<Product>> = _updateListProductLiveData
+    private var _deleteProductLiveData: MutableLiveData<Response<Boolean>> = MutableLiveData()
+    var deleteProductLiveData: LiveData<Response<Boolean>> = _deleteProductLiveData
 
-    private var _searchProductLiveData: MutableLiveData<List<Product>> = MutableLiveData()
-    var searchProductLiveData: LiveData<List<Product>> = _searchProductLiveData
+    private var _searchProductIdLiveData: MutableLiveData<Response<Product?>> = MutableLiveData()
+    var searchProductIdLiveData: LiveData<Response<Product?>> = _searchProductIdLiveData
 
-    private var _deleteProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    var deleteProductLiveData: LiveData<Boolean> = _deleteProductLiveData
-
-    private var _searchProductIdLiveData: MutableLiveData<Product?> = MutableLiveData()
-    var searchProductIdLiveData: LiveData<Product?> = _searchProductIdLiveData
-
-    private var _updateProductLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    var updateProductLiveData: LiveData<Boolean> = _updateProductLiveData
+    private var _updateProductLiveData: MutableLiveData<Response<Boolean>> = MutableLiveData()
+    var updateProductLiveData: LiveData<Response<Boolean>> = _updateProductLiveData
 
     private var _isClientRegister: MutableLiveData<Boolean> = MutableLiveData()
     var isClientRegister: LiveData<Boolean> = _isClientRegister
 
     override fun insertProduct(product: Product) {
+        _insertProductLiveData.value = Response.LOADING()
         firebaseServiceProducts.insertNewProduct(product)
             .onEach {
-                _insertProductLiveData.value = it
+                _insertProductLiveData.value = Response.SUCCESS(it)
             }.catch {
-                _insertProductLiveData.value = false
+                _insertProductLiveData.value = Response.ERROR(false)
                 Utils.log("Erro ao inserir o produto", Exception(it))
             }.launchIn(viewModelScope)
     }
 
     override fun loadProducts() {
+        _loadProductLiveData.value = Response.LOADING()
         firebaseServiceProducts.loadProducts()
             .onEach {
-                _loadProductLiveData.value = it
+                _loadProductLiveData.value = Response.SUCCESS(it)
             }.catch {
+                it.message
+                _loadProductLiveData.value = Response.ERROR(arrayListOf())
                 Utils.log("Erro ao carregar os produtos", Exception(it))
             }.launchIn(viewModelScope)
     }
 
     override fun deleteProduct(documentId: String?) {
+        _deleteProductLiveData.value = Response.LOADING()
         firebaseServiceProducts.deleteProduct(documentId.orEmpty())
             .onEach {
-                _deleteProductLiveData.value = it
+                _deleteProductLiveData.value = Response.SUCCESS(it)
             }.catch {
+                _deleteProductLiveData.value = Response.ERROR(false)
                 Utils.log("Erro ao deletar produto", Exception(it))
             }.launchIn(viewModelScope)
     }
 
-    /*override fun searchProduct(nomeProduct: String) {
-        firebaseServiceProducts.searchProducts(nomeProduct)
-            .onEach {
-                _loadProductLiveData.value = it
-            }.catch {
-                Utils.log("Erro ao buscar os produtos ", Exception(it))
-            }.launchIn(viewModelScope)
-    }*/
-
     override fun updateProduct(position: String, product: Product) {
+        _updateProductLiveData.value = Response.LOADING()
         firebaseServiceProducts.updateProduct(position, product)
             .onEach {
-                _updateProductLiveData.value = it
+                _updateProductLiveData.value = Response.SUCCESS(it)
             }.catch {
+                _updateProductLiveData.value = Response.ERROR(false)
                 Utils.log("Erro ao atualizar o produto ", Exception(it))
             }.launchIn(viewModelScope)
     }
 
-    override fun buscarProdutosId(idProducto: String) {
-        firebaseServiceProducts.searchProductId(idProducto)
+    override fun buscarProdutosId(idProduct: String) {
+        _searchProductIdLiveData.value = Response.LOADING()
+        firebaseServiceProducts.searchProductId(idProduct)
             .onEach {
-                _searchProductIdLiveData.value = it
+                _searchProductIdLiveData.value = Response.SUCCESS(it)
             }.catch {
+                _searchProductIdLiveData.value = Response.ERROR(null)
                 Utils.log("Erro ao buscar o produto por ID ", Exception(it))
             }.launchIn(viewModelScope)
     }
 
     override fun doRequest(isClientRegister: Boolean?) {
         _isClientRegister.value = isClientRegister
-    }
-
-    override fun updateListProducts() {
-        firebaseServiceProducts.loadProducts()
-            .onEach {
-                _updateListProductLiveData.postValue(it)
-            }.catch {
-                Utils.log("Erro ao carregar os produtos", Exception(it))
-            }.launchIn(viewModelScope)
     }
 }
