@@ -53,7 +53,7 @@ object Utils {
             val bmp = BitmapFactory.decodeStream(imageStream)
 
             var stream: ByteArrayOutputStream? = ByteArrayOutputStream()
-            bmp.compress(Bitmap.CompressFormat.JPEG, 30, stream)
+            bmp.compress(Bitmap.CompressFormat.JPEG, 20, stream)
             val byteArray = stream!!.toByteArray()
 
             stream.close()

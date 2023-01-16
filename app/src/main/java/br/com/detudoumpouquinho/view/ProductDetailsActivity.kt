@@ -147,7 +147,7 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 is Response.ERROR -> {
                     Toast.makeText(
                         this,
-                        "Houve alguma erro ao carregar os detalhes do produto",
+                        "Houve algum erro ao carregar os detalhes do produto",
                         Toast.LENGTH_LONG
                     ).show()
                 }

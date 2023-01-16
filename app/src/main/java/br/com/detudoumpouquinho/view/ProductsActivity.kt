@@ -5,6 +5,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,22 +13,24 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
-import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.databinding.ProductsActivityBinding
 import br.com.detudoumpouquinho.model.Product
+import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.view.adapter.ProdutosAdapter
 import br.com.detudoumpouquinho.viewModel.products.ProductsViewModel
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.products_activity.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -60,7 +63,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
 
         setObservers()
         setSearchView()
-        loadAds()
+        loadAdsNative()
         setViewModel()
         setSwipeRefreshLayoutProducts()
         setAdapter()
@@ -213,7 +216,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
             layoutManager =
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             setHasFixedSize(true)
-            isNestedScrollingEnabled = true
+            isNestedScrollingEnabled = false
             adapter = productsAdapter
         }
     }
@@ -258,12 +261,15 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         startActivity(intent)
     }
 
-    private fun loadAds() {
-        val adRequest = AdRequest
-            .Builder()
+    private fun loadAdsNative() {
+        val adLoader: AdLoader = AdLoader.Builder(this, "ca-app-pub-2528240545678093/9719459800")
+            .forNativeAd { nativeAd ->
+                binding.myTemplate.setNativeAd(nativeAd)
+            }
             .build()
 
-        adview.loadAd(adRequest)
+        adLoader.loadAds(AdRequest.Builder().build(),3)
+
     }
 
     companion object {

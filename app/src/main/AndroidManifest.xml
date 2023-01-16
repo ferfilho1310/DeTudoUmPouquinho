@@ -15,6 +15,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
             android:name=".onboarding.view.OnboardingActivity"
@@ -46,7 +47,8 @@
         <activity
             android:name=".view.ProductsActivity"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".view.SignUserActivity"
             android:exported="true"

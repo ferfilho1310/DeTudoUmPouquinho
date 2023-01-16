@@ -71,41 +71,37 @@
         android:id="@+id/pg_products"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/sw_products"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/my_template"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/sw_products"
+        app:layout_constraintStart_toStartOf="@+id/my_template"
         app:layout_constraintTop_toBottomOf="@+id/lnl_search" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sw_products"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/adview"
+        app:layout_constraintBottom_toTopOf="@+id/my_template"
         app:layout_constraintTop_toBottomOf="@+id/lnl_search">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_products"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:nestedScrollingEnabled="true"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toTopOf="@+id/adview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lnl_search"
-            app:spanCount="2" />
+            app:spanCount="2"
+            tools:listitem="@layout/products_item_view_holder" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adview"
-        android:layout_width="wrap_content"
+    <com.google.android.ads.nativetemplates.TemplateView
+        android:id="@+id/my_template"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-2528240545678093/8749498575"
+        app:adUnitId="ca-app-pub-2528240545678093/9719459800"
+        app:gnt_template_type="@layout/gnt_small_template_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -118,8 +114,8 @@
         android:layout_marginBottom="12dp"
         android:backgroundTint="@color/dark_blue"
         android:src="@drawable/ic_add"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/sw_products"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/my_template"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

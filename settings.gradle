@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Detudoumpouquinho"
 include ':app'
+include ':nativetemplates'

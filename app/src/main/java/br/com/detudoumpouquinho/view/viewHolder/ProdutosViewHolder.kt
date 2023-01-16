@@ -27,7 +27,6 @@ class ProdutosViewHolder(val view: View, val context: Context) : RecyclerView.Vi
         product.apply {
             Glide.with(context)
                 .load(Utils.stringToBitMap(image?.get(0)))
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(imgProduct)
             valueProduct.text = SIMBOL.REAIS.plus(value)
