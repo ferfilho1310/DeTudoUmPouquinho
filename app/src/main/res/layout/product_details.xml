@@ -54,15 +54,18 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_product_details"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
                 android:visibility="gone"
+                android:layout_gravity="center"
+                android:padding="80dp"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
                 app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
                 app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
                 app:lottie_autoPlay="true"
-                app:lottie_loop="true" />
+                app:lottie_loop="true"
+                app:lottie_url="https://assets2.lottiefiles.com/packages/lf20_oboipihr.json"/>
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adview_product_details"

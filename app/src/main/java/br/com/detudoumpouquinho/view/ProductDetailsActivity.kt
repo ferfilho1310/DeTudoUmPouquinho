@@ -108,9 +108,6 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setViewModel() {
-        binding.lottieProductDetails.visibility = View.VISIBLE
-        binding.viewPager.visibility = View.GONE
-
         viewModelProducts.searchProductIdLiveData.observe(this) {
             when (it) {
                 is Response.LOADING -> {

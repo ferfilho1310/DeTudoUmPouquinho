@@ -113,13 +113,13 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
     }
 
     private fun buildMessageSendMessageWhatsApp() {
-        val text = StringBuilder()
-        val textNoSalve = StringBuilder()
+        val templateRequestSalvedSharedPreferences = StringBuilder()
+        val textNoSalveInSharedPreferences = StringBuilder()
 
         val endereco = if (sharedPreferences != null) {
-            templateRequest(sharedPreferences, text)
+            templateRequest(sharedPreferences, templateRequestSalvedSharedPreferences)
         } else {
-            textNoSalve.apply {
+            textNoSalveInSharedPreferences.apply {
                 binding.run {
                     append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
                     append("no valor de ${product.value}.\n\n")
@@ -146,7 +146,35 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
                 dismiss()
             }
             R.id.bt_finish_request -> {
-                buildMessageSendMessageWhatsApp()
+                userInformationValidate()
+            }
+        }
+    }
+
+    private fun userInformationValidate() {
+        binding.apply {
+            when {
+                edStreet.text.toString().isEmpty() -> {
+                    edStreet.error = "Informe a rua"
+                }
+                edNumber.text.toString().isEmpty() -> {
+                    edNumber.error = "Informe o numero"
+                }
+                edBairro.text.toString().isEmpty() -> {
+                    edBairro.error = "Informe o bairro"
+                }
+                edCidade.text.toString().isEmpty() -> {
+                    edCidade.error = "Informe a cidade"
+                }
+                edEstado.text.toString().isEmpty() -> {
+                    edEstado.error = "Informe o estado"
+                }
+                edCep.text.toString().isEmpty() -> {
+                    edCep.error = "Informe o cep"
+                }
+                else -> {
+                    buildMessageSendMessageWhatsApp()
+                }
             }
         }
     }
@@ -156,10 +184,8 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
         remoteConfig.fetchCelular(requireContext())
     }
 
-    private fun sendMessageWhatsApp(endereco: StringBuilder, contact: String) {
-
-        val url = "https://api.whatsapp.com/send?phone=$contact&text=${endereco}"
-
+    private fun sendMessageWhatsApp(informationUser: StringBuilder, phoneNumber: String) {
+        val url = "https://api.whatsapp.com/send?phone=$phoneNumber&text=${informationUser}"
         try {
             val pm = requireActivity().packageManager
             pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES)
@@ -171,12 +197,12 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
 
     private fun templateRequest(
         sharedPreferences: SharedPreferences?,
-        text: StringBuilder
+        templateRequest: StringBuilder
     ): StringBuilder {
-        return text.apply {
-            text.append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
-            text.append("no valor de R$ ${product.value}.\n\n")
-            text.append(
+        return templateRequest.apply {
+            templateRequest.append("Olá, Gostaria de fazer o pedido de um(a) ${product.nameProduct} ")
+            templateRequest.append("no valor de R$ ${product.value}.\n\n")
+            templateRequest.append(
                 "O endereço para envio é:\n Rua: ${
                     sharedPreferences?.getString(
                         "rua",
@@ -184,10 +210,10 @@ class SendRequestProductBottomSheet : BottomSheetDialogFragment(), View.OnClickL
                     )
                 }\n"
             )
-            text.append("Número: ${sharedPreferences?.getString("numero", "")}\n")
-            text.append("Cidade: ${sharedPreferences?.getString("cidade", "")}\n")
-            text.append("Estado: ${sharedPreferences?.getString("estado", "")}\n")
-            text.append("CEP: ${sharedPreferences?.getString("cep", "")}\n")
+            templateRequest.append("Número: ${sharedPreferences?.getString("numero", "")}\n")
+            templateRequest.append("Cidade: ${sharedPreferences?.getString("cidade", "")}\n")
+            templateRequest.append("Estado: ${sharedPreferences?.getString("estado", "")}\n")
+            templateRequest.append("CEP: ${sharedPreferences?.getString("cep", "")}\n")
         }
     }
 
