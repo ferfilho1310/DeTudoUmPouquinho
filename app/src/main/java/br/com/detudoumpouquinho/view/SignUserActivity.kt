@@ -89,8 +89,6 @@ class SignUserActivity : AppCompatActivity(), View.OnClickListener {
                 sign_password.error = "Informe sua senha"
             }
             else -> {
-                lottie.visibility = View.VISIBLE
-                bt_sign_user.visibility = View.GONE
                 userViewModel.signUser(
                     User(
                         email = sign_email.text.toString(),

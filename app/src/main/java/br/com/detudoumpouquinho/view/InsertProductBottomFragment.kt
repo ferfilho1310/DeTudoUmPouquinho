@@ -26,7 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
 
 
-class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialogFragment(), View.OnClickListener {
+class InsertProductBottomFragment() : BottomSheetDialogFragment(), View.OnClickListener {
 
     private val CAMERA_REQUEST = 1888
 
@@ -136,7 +136,7 @@ class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialog
 
                         productsAdapter.listFotos(
                             Utils.uriToBitmap(
-                                data!!,
+                                data,
                                 requireContext().contentResolver
                             ).orEmpty()
                         )
@@ -148,16 +148,16 @@ class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialog
                         }
 
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Picture Not taken", Toast.LENGTH_LONG)
+                        Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_LONG)
                             .show()
                     }
                 }
                 RESULT_CANCELED -> {
-                    Toast.makeText(requireContext(), "Picture was not taken 1 ", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT)
                         .show();
                 }
                 else -> {
-                    Toast.makeText(requireContext(), "Picture was not taken 2 ", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Nenhuma imagem selecionada", Toast.LENGTH_SHORT)
                         .show();
                 }
             }
@@ -201,9 +201,5 @@ class InsertProductBottomFragment(adapter: ProdutosAdapter?) : BottomSheetDialog
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         return dialog
-    }
-
-    fun newInstance(adapter: ProdutosAdapter): InsertProductBottomFragment {
-        return InsertProductBottomFragment(adapter)
     }
 }

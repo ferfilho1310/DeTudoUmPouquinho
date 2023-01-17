@@ -17,73 +17,62 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bt_fazer_pedido"
         app:layout_constraintTop_toBottomOf="@+id/img_close_product_detail">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tablayout_image"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tablayout_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    android:background="#CBCCD6"
+                    app:tabBackground="@drawable/dot_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabPaddingEnd="7dp"
+                    app:tabPaddingStart="7dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </androidx.viewpager.widget.ViewPager>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_product_details"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+                app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+                app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true" />
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adview_product_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="#CBCCD6"
-                app:tabBackground="@drawable/dot_selector"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabPaddingEnd="7dp"
-                app:tabPaddingStart="7dp"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </androidx.viewpager.widget.ViewPager>
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_product_details"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.53"/>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bt_fazer_pedido"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adview_product_details">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:layout_marginVertical="8dp"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-2528240545678093/8749498575"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -106,7 +95,7 @@
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Iphone XR 13"/>
+                    tools:text="Iphone XR 13" />
 
                 <TextView
                     android:id="@+id/lojista"
@@ -115,11 +104,11 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:textSize="12sp"
-                    tools:text="Lucas Imports"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/value_product"
                     app:layout_constraintStart_toStartOf="@+id/title_product"
-                    app:layout_constraintTop_toBottomOf="@+id/title_product" />
+                    app:layout_constraintTop_toBottomOf="@+id/title_product"
+                    tools:text="Lucas Imports" />
 
                 <TextView
                     android:id="@+id/value_product"
@@ -128,17 +117,17 @@
                     android:layout_marginEnd="8dp"
                     android:textColor="@color/dark_green"
                     android:textStyle="bold"
-                    tools:text="R$ 258,99"
                     app:layout_constraintBottom_toBottomOf="@+id/lojista"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/lojista" />
+                    app:layout_constraintTop_toTopOf="@+id/lojista"
+                    tools:text="R$ 258,99" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout_1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:background="@color/white"
                 android:paddingBottom="8dp"
@@ -164,39 +153,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text=""
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/description_product"
-                    app:layout_constraintTop_toBottomOf="@+id/description_product" />
+                    app:layout_constraintTop_toBottomOf="@+id/description_product"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu risus hendrerit, condimentum augue eu, aliquam mauris. Ut ullamcorper eleifend ex eget ultricies. Curabitur vehicula turpis eget nisi pharetra scelerisque. Ut vel tempor felis. In sit amet augue arcu. Integer eget ipsum tincidunt, sollicitudin augue a, fringilla sapien. Quisque auctor tincidunt porttitor. Nulla non odio sit amet arcu iaculis auctor. Praesent dui risus, laoreet vel suscipit quis, fermentum sed metus.
+In pellentesque lobortis ex quis posuere. Donec ultrices pellentesque est quis laoreet. Mauris facilisis arcu eu ante iaculis, eleifend rhoncus sapien dignissim. In consequat massa risus, ut ultrices lacus imperdiet ut. Maecenas sit amet est est. Suspendisse aliquam pulvinar aliquet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer vel metus scelerisque eros fringilla dignissim. Sed sodales feugiat luctus. Suspendisse luctus enim metus, pulvinar hendrerit eros sodales eget. Duis lacinia turpis nec felis fermentum, eu efficitur enim posuere. Proin lacinia justo vitae ante dapibus, placerat dictum tortor condimentum." />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/bt_fazer_pedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/effect_button"
-        android:text="Fazer pedido"
+        android:text="Tenho interesse neste produto"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.gms.ads.AdView
-        android:layout_marginTop="8dp"
-        android:id="@+id/adview_product_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-2528240545678093/8749498575"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <TextView
         android:id="@+id/tv_product_not_found"

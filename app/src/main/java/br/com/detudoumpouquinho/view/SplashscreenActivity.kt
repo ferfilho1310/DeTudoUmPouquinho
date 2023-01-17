@@ -56,6 +56,6 @@ class SplashscreenActivity : AppCompatActivity() {
     }
 
     private object DELAY {
-        const val TIME = 3000L
+        const val TIME = 2000L
     }
 }

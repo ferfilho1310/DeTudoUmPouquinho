@@ -1,5 +1,6 @@
 package br.com.detudoumpouquinho.productsUtils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.Context
@@ -8,7 +9,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
-import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -32,12 +34,12 @@ object Utils {
     }
 
     fun uriToBitmap(
-        imageReturnedIntent: Intent,
+        imageReturnedIntent: Intent?,
         getContentResolver: ContentResolver
     ): String? {
 
         try {
-            val selectedImage: Uri? = imageReturnedIntent.data
+            val selectedImage: Uri? = imageReturnedIntent?.data
 
             var imageStream: InputStream? = null
             try {
@@ -53,7 +55,7 @@ object Utils {
             val bmp = BitmapFactory.decodeStream(imageStream)
 
             var stream: ByteArrayOutputStream? = ByteArrayOutputStream()
-            bmp.compress(Bitmap.CompressFormat.JPEG, 20, stream)
+            bmp.compress(Bitmap.CompressFormat.JPEG, 12, stream)
             val byteArray = stream!!.toByteArray()
 
             stream.close()

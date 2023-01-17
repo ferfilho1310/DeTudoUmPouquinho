@@ -77,7 +77,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     private fun productNotFound() {
         product?.let {
             binding.apply {
-                nestedScrollView.isVisible = true
+                constraintLayout.isVisible = true
+                constraintLayout1.isVisible = true
                 viewPager.isVisible = true
                 adviewProductDetails.isVisible = true
                 btFazerPedido.isVisible = true
@@ -85,7 +86,8 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
             }
         } ?: run {
             binding.apply {
-                nestedScrollView.isVisible = false
+                constraintLayout.isVisible = false
+                constraintLayout1.isVisible = false
                 viewPager.isVisible = false
                 adviewProductDetails.isVisible = false
                 btFazerPedido.isVisible = false
@@ -97,21 +99,12 @@ class ProductDetailsActivity : AppCompatActivity(), View.OnClickListener {
     private fun setImageAdapter() {
         imageAdapter = ImageAdapter(this)
         binding.viewPager.adapter = imageAdapter
-        binding.tablayoutImage.setupWithViewPager(viewPager, true)
+        binding.tablayoutImage.setupWithViewPager(binding.viewPager, true)
     }
 
     private fun listeners() {
         binding.imgCloseProductDetail.setOnClickListener(this)
         binding.btFazerPedido.setOnClickListener(this)
-    }
-
-
-    private fun eventClicked(product: Product) {
-        val parameters = Bundle().apply {
-            putParcelable("Product_Clicked", product)
-        }
-
-        FirebaseAnalytics.getInstance(this).logEvent("product_clicked", parameters)
     }
 
     private fun setViewModel() {

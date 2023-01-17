@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.productsUtils.Response
 import br.com.detudoumpouquinho.model.User
+import br.com.detudoumpouquinho.productsUtils.Utils
 import br.com.detudoumpouquinho.viewModel.user.UserViewModel
 import kotlinx.android.synthetic.main.create_new_user_activity.*
 import org.koin.android.ext.android.inject
@@ -84,12 +85,6 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun startProductActivity() {
-        val intent = Intent(this, ProductsActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
@@ -117,8 +112,6 @@ class CreateNewUserActivity : AppCompatActivity(), View.OnClickListener {
                 ).show()
             }
             else -> {
-                lottie_create_user.visibility = View.VISIBLE
-                create_user_button.visibility = View.GONE
                 userViewModel.createUser(
                     User(
                         name = create_name.text.toString(),

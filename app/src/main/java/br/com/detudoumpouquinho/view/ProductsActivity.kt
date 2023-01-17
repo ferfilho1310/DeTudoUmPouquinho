@@ -5,7 +5,6 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +12,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.detudoumpouquinho.R
 import br.com.detudoumpouquinho.databinding.ProductsActivityBinding
@@ -106,7 +103,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.insert_new_product -> {
-                val bottomSheetDialogFragment = InsertProductBottomFragment(productsAdapter)
+                val bottomSheetDialogFragment = InsertProductBottomFragment()
                 bottomSheetDialogFragment.isCancelable = false
                 bottomSheetDialogFragment.show(supportFragmentManager, "TAG")
             }
@@ -120,9 +117,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         FirebaseAuth.getInstance().currentUser?.let {
-                userViewModel.searchIdUser(
-                    it.uid
-                )
+            userViewModel.searchIdUser(
+                it.uid
+            )
         } ?: run {
             binding.insertNewProduct.isVisible = false
         }
@@ -230,7 +227,7 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         productsViewModel.deleteProductLiveData.observe(this) {
-            when(it){
+            when (it) {
                 is Response.SUCCESS -> {
                     Toast.makeText(this, "Produto deletado", Toast.LENGTH_SHORT).show();
                     setSwipeRefreshLayoutProducts()
@@ -245,14 +242,9 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showDetailsProduct(productId: String?) {
-        productId?.let {
-            val intent = Intent(this, ProductDetailsActivity::class.java)
-            intent.putExtra("position", it)
-            startActivity(intent)
-        } ?: run {
-            Toast.makeText(this, "Produto indisponível no momento.", Toast.LENGTH_LONG).show()
-        }
-
+        val intent = Intent(this, ProductDetailsActivity::class.java)
+        intent.putExtra("position", productId)
+        startActivity(intent)
     }
 
     private fun updateProduct(productId: String?) {
@@ -262,14 +254,17 @@ class ProductsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun loadAdsNative() {
-        val adLoader: AdLoader = AdLoader.Builder(this, "ca-app-pub-2528240545678093/9719459800")
+        lateinit var adLoader: AdLoader
+        adLoader = AdLoader.Builder(this, "ca-app-pub-2528240545678093/9719459800")
             .forNativeAd { nativeAd ->
-                binding.myTemplate.setNativeAd(nativeAd)
+                if (adLoader.isLoading) {
+                    binding.myTemplate.isVisible = true
+                    binding.myTemplate.setNativeAd(nativeAd)
+                }
             }
             .build()
 
-        adLoader.loadAds(AdRequest.Builder().build(),3)
-
+        adLoader.loadAds(AdRequest.Builder().build(), 3)
     }
 
     companion object {
